@@ -13,16 +13,6 @@
         <tbody>
             {%for tikit in tikits%}
                 <div class="entry unvoted">
-                    <div class="midcol" name="{{tikit.0.id}}">
-                        <div class="{% if tikit.vote == 1 %}arrow up login-required checked {% else %} arrow up login-required
-        {% endif %}" name="0" onclick="vote_up(this);return false;" role="button" aria-label="upvote" tabindex="0">
-                        up</div>
-                        <div class="score likes">•</div>
-                        <div class="score unvoted" style="display:none;">•</div>
-                        <div class="score dislikes" style="display:none;">•</div>
-                        <div class="{% if tikit.vote == -1 %}arrow up login-required checked {% else %} arrow up login-required
-        {% endif %}" name="0" onclick="vote_down(this);return false;" role="button" aria-label="downvote" tabindex="0">
-                        down</div>
                     </div>
                     <a class="title loggedin" href="{{tikit.0.tikitUrl}}" tabindex="1"><h2 id="type-blockquotes">{{tikit.0.tikitTitle}}</h2></a>
                     <div class="entry unvoted">

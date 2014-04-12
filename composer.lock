@@ -3,8 +3,53 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "4c09c68b9987b2587c2fa47fad2315cb",
+    "hash": "1b39884adc67e463e20aa8d90fec0fb1",
     "packages": [
+        {
+            "name": "divi/ajax-login-bundle",
+            "version": "dev-master",
+            "target-dir": "Divi/AjaxLoginBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Divi/AjaxLoginBundle.git",
+                "reference": "a69175a25c7a609e3fbbbbeaa375d729c5d60a9e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Divi/AjaxLoginBundle/zipball/a69175a25c7a609e3fbbbbeaa375d729c5d60a9e",
+                "reference": "a69175a25c7a609e3fbbbbeaa375d729c5d60a9e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Divi\\AjaxLoginBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sylvain Lorinet",
+                    "email": "sylvain.lorinet@gmail.com"
+                }
+            ],
+            "description": "Ajax Form Login for Symfony 2 PHP Framework",
+            "homepage": "https://github.com/Divi/AjaxLoginBundle",
+            "keywords": [
+                "Authentication",
+                "ajax",
+                "form",
+                "login",
+                "symfony"
+            ],
+            "time": "2014-01-16 22:21:10"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.1.2",
@@ -2134,7 +2179,8 @@
         "friendsofsymfony/user-bundle": 20,
         "knplabs/knp-menu": 20,
         "knplabs/knp-menu-bundle": 20,
-        "gregwar/captcha-bundle": 20
+        "gregwar/captcha-bundle": 20,
+        "divi/ajax-login-bundle": 20
     },
     "platform": {
         "php": ">=5.3.3"

@@ -9,6 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Tikit\TikitBundle\Form\TikitType;
 use Tikit\TikitBundle\Entity\Tikit;
 
+use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\Event\GetResponseUserEvent;
+use FOS\UserBundle\Event\UserEvent;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
+
 // these import the "@Route" and "@Template" annotations
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -88,12 +94,30 @@ class TikitController extends Controller
         //var_dump($tikit);
         $tikit = $this->get('tikit_model')->getTikit($id);
         $comments = $this->get('comment_model')->getTikitComments($id);
+        $csrfToken = $this->container->has('form.csrf_provider')
+            ? $this->container->get('form.csrf_provider')->generateCsrfToken('authenticate')
+            : null;
+        $formFactory = $this->container->get('fos_user.registration.form.factory');
+        $userManager = $this->container->get('fos_user.user_manager');
+        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+        $dispatcher = $this->container->get('event_dispatcher');
+
+        $user = $userManager->createUser();
+        $user->setEnabled(true);
+
+        $event = new GetResponseUserEvent($user, $request);
+        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
+
+        $form = $formFactory->createForm();
+        $form->setData($user);
         return $this->render('TikitTikitBundle:Tikit:tikit.html.twig', array(
             //'current_page'  => $page['page'],
             //'total_pages' => $page['total_pages'],
             'tikit' => $tikit[0][0],
             'user' => $tikit[0],
-            'comments' => $comments
+            'comments' => $comments,
+            'csrf_token' => $csrfToken,
+            'form' => $form->createView()
         ));
     }
 

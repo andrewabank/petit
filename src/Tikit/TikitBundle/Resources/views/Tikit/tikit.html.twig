@@ -10,7 +10,42 @@
     <script src="{{ asset('/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('/js/bootswatch.js') }}"></script>
     <script src="{{ asset('js/tikit/comment.js') }}" type="text/javascript"></script>
+    {# Include this line to get the javascript AJAX code #}
+{% include 'DiviAjaxLoginBundle:Javascript:init.html.twig' with {'form_selector': '#form-login'} %}
 {% endblock %}
+    
+{% form_theme form _self %}
+
+{% block email_widget %}
+    <div class="col-lg-10">
+        {% set type = type|default('email') %}
+        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="Email" />
+    </div>
+{% endblock %}
+{% block text_widget %}
+    <div class="col-lg-10">
+        {% set type = type|default('text') %}
+        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="Username" />
+    </div>
+{% endblock %}
+{% block password_widget %}
+    <div class="col-lg-10">
+        {% set type = type|default('password') %}
+        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="Password" />
+    </div>
+{% endblock %} 
+
+{% block email_label %}
+    <label class="col-lg-2 control-label required" >Email:</label>
+{% endblock %}
+{% block text_label %}
+    <label class="col-lg-2 control-label required" >Username:</label>
+{% endblock %}
+{% block password_label %}
+    <label class="col-lg-2 control-label required" >Password:</label>
+{% endblock %}
+    
+    
 {% block content %}
         <tbody>
                 <p class="title">
@@ -26,23 +61,99 @@
                 <a class="comments" href="http://ru.reddit.com/r/pics/comments/1psut6/honest_canadian_commuters_the_workers_were/" target="_parent">{{tikit.commentCount}} комментарів {{user.username}}{{user.id}}</a>
                 </li>
                 </ul>
+                <div id="sign-this-petition" class="clearfix">
+                      <div class="col-left">
+                        <a id="button-sign-this-petition-inactive" href="/user" class="btn btn-primary">Підписати петицію</a>
+                      </div><!--/col-2-->
+                      <div class="col-right">
+                        <h3>Необхідно зареєструватись щою підписати</h3> <div id="why-overlay-text">ЧОМУ?</div>
+                        <div id="why-overlay" class="display-none"  style="display: none;">
+                          <div class="entry"><p>Щоб створити або підписати петицію зареєстуйтесь.  Це справді легко - введіть імя, прізвище, 
+                                  імейл і підтвердіть імейл.  Натисніть "Зареєструватись" і заповніть форму.  
+                                  Більше тут <a href="”/how-why/terms-participation”">Правила</a> і <a href="/privacy">приватність</a>.</p></div>
+                        </div>
+                        <div class="buttons">
+                          <a href="/user?destination=petition/zberegh-vyplatu-po-nar" class="btn btn-primary" id="button-sign-in">Sign In</a>                
+                          <div class="orw">або</div>
+                          <a href="/user/register?destination=petition/zberegh-vyplatu-po-nar" class="btn btn-primary" id="button-create-an-account">Create an Account</a>
+                        </div>
+                      </div>
+                      <h3 class="clearfix" style="float: left">Якщо ви зареєстровані, але є труднощі з підписанням  
+                          <a href="/how-why/frequently-asked-questions">натисніть тут щоб отримати допомогу.</a>
+                      </h3><br>
+                  </div>   
+                
+                
+                <div id="control" class="form-sign"><!-- CONTROL DIV -->
+                    <div class="suporter-otherwise">
+                        <b>Зареєстровані?</b><br>Введіть імейл і натисніть "Голосувати".</div>
+
+                    <div class="suporter-otherwise"><b>Перший раз тут?</b> Заповніть форму нижче.</div>
+              
+<div class="col-lg-6">
+    <div class="well">
+      <form class="bs-example form-horizontal" action="{{ path("fos_user_security_check") }}" method="post" id="form-login">
+        <fieldset>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+          <legend>Зареєстровані? Введіть e-mail, пароль і натисніть "Підписати"</legend>
+          <div class="form-group">
+            <label class="col-lg-2 control-label" for="username">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control" id="username" name="_username" value="" required="required" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-2 control-label" for="password">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>
+            <div class="col-lg-10">
+              <input type="password" class="form-control" id="password" name="_password" required="required" />
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="remember_me" name="_remember_me" value="on" />{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-10 col-lg-offset-2">
+              <input type="submit" id="_submit" class="btn btn-primary" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
+            </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+                
+            
+        <div class="col-lg-6">
+            <div class="well">
+<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="bs-example form-horizontal">
+    {# {{ form_widget(form) }} #}
+<fieldset>
+  <legend>Перший раз? Заповніть форму і натисніть "Підписати"</legend>
+    <div class="form-group">
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.username) }}
+        {{ form_widget(form.username) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.plainPassword.first) }}
+        {{ form_widget(form.plainPassword.first) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.plainPassword.second) }}
+        {{ form_widget(form.plainPassword.second) }}
+    </div>
+    <div class="col-lg-10 col-lg-offset-2">
+      <input type="submit" value="Register" name="submit" class="btn btn-primary" id="submit">
+    </div>
+  {{ form_rest(form) }}
+  </fieldset>
+</form>
+    </div>
+</div>              
                 {% if app.user %}
-                <form action="" class="usertext cloneable" id="form-comment">
-                    <input type="hidden" name="tikit_id" id="tikit_id" value="{{tikit.id}}">
-                    <input type="hidden" name="user_id" id="user_id" value="{{ app.user.id }}">
-                    <div class="usertext-edit" style="">
-                        <div>
-                        <textarea rows="1" cols="1" name="text" id="comment" class=""></textarea>
-                        </div>
-                        <div class="bottom-area">
-                        <div class="usertext-buttons">
-                            <button type="submit" onclick="submit_usertext();return false;" class="save">save</button>
-                            <span class="status"></span>
-                        </div>
-                        <a href="/wiki/reddiquette" class="reddiquette" target="_blank" tabindex="100">реддикет</a>
-                        </div>
-                    </div>
-                </form>
+                
                 {% else %}
                 {% endif %}
                 <div>

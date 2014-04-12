@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new Tikit\TikitBundle\TikitTikitBundle(),
             new RaulFraile\Bundle\LadybugBundle\RaulFraileLadybugBundle(),
             new Gregwar\CaptchaBundle\GregwarCaptchaBundle(),
+            new Divi\AjaxLoginBundle\DiviAjaxLoginBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
