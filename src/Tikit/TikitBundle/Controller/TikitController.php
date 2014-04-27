@@ -18,6 +18,7 @@ use FOS\UserBundle\Event\FilterUserResponseEvent;
 // these import the "@Route" and "@Template" annotations
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Acme\UserBundle\Form\Type\RegistrationFormType;
 
 class TikitController extends Controller
 {
@@ -109,6 +110,7 @@ class TikitController extends Controller
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
 
         $form = $formFactory->createForm();
+        //$form = $this->createForm($this->get(new \Acme\UserBundle\Form\Type\RegistrationFormType(), $user));
         $form->setData($user);
         return $this->render('TikitTikitBundle:Tikit:tikit.html.twig', array(
             //'current_page'  => $page['page'],

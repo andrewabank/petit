@@ -472,4 +472,25 @@ class FosUser
     {
         return $this->id;
     }
+    
+        
+    /**
+     * 
+     * @ORM\Column(type="string", length=255)
+     *
+     */
+    protected $name;
+
+    
+    public function getName()
+    {
+        return $this->name;
+    }
+    
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Acme\UserBundle;
+namespace Tikit\UserBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Doctrine\ORM\Mapping as ORM;

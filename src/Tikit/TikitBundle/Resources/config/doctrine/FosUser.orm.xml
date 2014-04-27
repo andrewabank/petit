@@ -20,5 +20,6 @@
     <field name="roles" type="array" column="roles" nullable="false"/>
     <field name="credentialsExpired" type="boolean" column="credentials_expired" nullable="false"/>
     <field name="credentialsExpireAt" type="datetime" column="credentials_expire_at" nullable="true"/>
+    <field name="name" type="string" column="name" length="255" nullable="false"/>
   </entity>
 </doctrine-mapping>

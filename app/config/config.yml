@@ -79,6 +79,8 @@ fos_user:
     firewall_name: main
     user_class: Acme\UserBundle\Entity\User
     registration:
+      form:
+        type: acme_user_registration
       confirmation:
         enabled: true
         template: FOSUserBundle:Registration:email.txt.twig
@@ -102,5 +104,10 @@ services:
     comment_model:
             class: "%comment_model.class%"
             arguments:    ["@doctrine.orm.entity_manager"]
-
+            
+    acme_user.registration.form.type:
+        class: Acme\UserBundle\Form\Type\RegistrationFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: acme_user_registration }
 gregwar_captcha: ~

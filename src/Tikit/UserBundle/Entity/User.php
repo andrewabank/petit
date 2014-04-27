@@ -1,7 +1,7 @@
 <?php
-// src/Acme/UserBundle/Entity/User.php
+// src/Tikit/UserBundle/Entity/User.php
 
-namespace Acme\UserBundle\Entity;
+namespace Tikit\UserBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
@@ -51,7 +51,7 @@ class User extends BaseUser
      */
     public function setEmailCanonical($emailCanonical)
     {
-        parent::setUsernameCanonical($emailCanonical);
+        $this->setUsernameCanonical($emailCanonical);
 
         return parent::setEmailCanonical($emailCanonical);
     }

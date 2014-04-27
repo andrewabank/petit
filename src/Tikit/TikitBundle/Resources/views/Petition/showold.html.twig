@@ -1,0 +1,55 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+    Petition - {{ entity.petitionTitle }}
+{% endblock %}
+{% block body -%}
+    <h1>Petition</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Petitiontitle</th>
+                <td>{{ entity.petitionTitle }}</td>
+            </tr>
+            <tr>
+                <th>Petitiondescription</th>
+                <td>{{ entity.petitionDescription }}</td>
+            </tr>
+            <tr>
+                <th>Petitionurl</th>
+                <td>{{ entity.petitionUrl }}</td>
+            </tr>
+            <tr>
+                <th>Score</th>
+                <td>{{ entity.score }}</td>
+            </tr>
+            <tr>
+                <th>Dateadded</th>
+                <td>{{ entity.dateAdded|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ entity.status }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('petition') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('petition_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

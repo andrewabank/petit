@@ -27,3 +27,27 @@ _tikit_loadlinkdata:
 _tikit_addtikit:
     path: /addtikit/tikit
     defaults:  { _controller: TikitTikitBundle:Tikit:addtikit }
+    
+petition_create:
+    path: /p/create
+    defaults:  { _controller: TikitTikitBundle:Petition:create }
+    
+petition:
+    path: /p/index
+    defaults:  { _controller: TikitTikitBundle:Petition:index }
+petition_show:
+    path: /p/{id}
+    defaults:  { _controller: TikitTikitBundle:Petition:show }
+petition_delete:
+    path: /p/delete/{id}
+    defaults:  { _controller: TikitTikitBundle:Petition:delete }
+petition_edit:
+    path: /p/edit/{id}
+    defaults:  { _controller: TikitTikitBundle:Petition:edit }
+petition_update:
+    path: /p/update/{id}
+    defaults:  { _controller: TikitTikitBundle:Petition:update }
+petition_new:
+    path: /p/create
+    defaults:  { _controller: TikitTikitBundle:Petition:create }
+    
