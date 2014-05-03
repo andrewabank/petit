@@ -493,4 +493,25 @@ class FosUser
 
         return $this;
     }
+    
+    const SCORE = 1;    
+    /**
+     * 
+     * @ORM\Column(type="integer", length=11)
+     *
+     */
+    protected $petition  = self::SCORE;
+
+    
+    public function getPetition()
+    {
+        return $this->petition;
+    }
+    
+    public function setPetition($petition)
+    {
+        $this->petition = $petition;
+
+        return $this;
+    }
 }

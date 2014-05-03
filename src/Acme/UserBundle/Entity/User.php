@@ -75,5 +75,25 @@ class User extends BaseUser
 
         return $this;
     }
+    
+    /**
+     * 
+     * @ORM\Column(type="integer", length=11)
+     *
+     */
+    protected $petition;
+
+    
+    public function getPetition()
+    {
+        return $this->petition;
+    }
+    
+    public function setPetition($petition)
+    {
+        $this->petition = $petition;
+
+        return $this;
+    }
 }
 

@@ -13,6 +13,10 @@ class RegistrationFormType extends BaseType
 
         // add name field
         $builder->add('name');
+        /*$builder->add('petition', 'hidden', array(
+            'required' => false, 'mapped' => false
+        ));*/
+        $builder->add('petition', 'hidden');
         // remove username
         $builder->remove('username');
     }

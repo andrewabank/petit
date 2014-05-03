@@ -2,6 +2,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: "@TikitTikitBundle/Resources/config/services.yml" }
 
 framework:
     #esi:             ~
@@ -110,4 +111,9 @@ services:
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: acme_user_registration }
+    acme_user.registration_success:
+        class: Acme\UserBundle\EventListener\RegistrationSuccessListener
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: kernel.event_subscriber }
 gregwar_captcha: ~

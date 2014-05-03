@@ -5,3 +5,7 @@ services:
 #    tikit_tikit.example:
 #        class: %tikit_tikit.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+    tikit.model.tikitmodel:
+        class:  Tikit\TikitBundle\Service\TikitModel
+        arguments: ["@doctrine.orm.entity_manager"]
+            #entityManager: "@doctrine.orm.entity_manager"
