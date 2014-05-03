@@ -9,3 +9,7 @@ services:
         class:  Tikit\TikitBundle\Service\TikitModel
         arguments: ["@doctrine.orm.entity_manager"]
             #entityManager: "@doctrine.orm.entity_manager"
+    petition.model.petitionmodel:
+        class:  Tikit\TikitBundle\Service\PetitionModel
+        arguments: ["@doctrine.orm.entity_manager"]
+            

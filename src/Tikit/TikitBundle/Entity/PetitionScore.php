@@ -81,7 +81,7 @@ class PetitionScore
      * @param \Tikit\TikitBundle\Entity\Petition $petition
      * @return TikitScore
      */
-    public function setTikit(\Tikit\TikitBundle\Entity\Petition $petition = null)
+    public function setPetition(\Tikit\TikitBundle\Entity\Petition $petition = null)
     {
         $this->petition = $petition;
 

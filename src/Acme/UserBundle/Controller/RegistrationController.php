@@ -47,10 +47,10 @@ class RegistrationController extends BaseController
 
             if ($form->isValid()) {
                 global $kernel;    
-                $someService = $kernel->getContainer()->get('tikit.model.tikitmodel');
-                $tikitid = $form["onename"]->getData();
+                $someService = $kernel->getContainer()->get('petition.model.petitionmodel');
+                $tikitid = $form["petition"]->getData();
                 //var_dump($someService);
-                $someService->voteTikit(1,1,1);
+                $someService->votePetition(2,1,1);
                 
                 $event = new FormEvent($form, $request);
                 $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
