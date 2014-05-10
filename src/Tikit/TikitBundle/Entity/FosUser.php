@@ -514,4 +514,10 @@ class FosUser
 
         return $this;
     }
+  
+    //represent object as string
+    public function __toString()
+    {
+        return $this->username;
+    }    
 }

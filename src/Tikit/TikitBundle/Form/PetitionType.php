@@ -17,9 +17,9 @@ class PetitionType extends AbstractType
         $builder
             ->add('petitionTitle')
             ->add('petitionDescription')
-            ->add('petitionUrl')
-            ->add('dateAdded')
-            ->add('user')
+            //->add('petitionUrl', 'hidden', array('mapped' => false))
+            //->add('dateAdded')
+            ->add('user', 'hidden')
             ->add('category')
         ;
     }

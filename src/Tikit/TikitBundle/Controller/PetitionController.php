@@ -49,10 +49,8 @@ class PetitionController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
+            
+            $this->get('petition.model.petitionmodel')->addPetition($entity);
             return $this->redirect($this->generateUrl('petition_show', array('id' => $entity->getId())));
         }
 
@@ -84,16 +82,16 @@ class PetitionController extends Controller
     /**
      * Finds and displays a Petition entity.
      *
-     * @Route("/{id}", name="petition_show")
+     * @Route("/{url}", name="petition_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id)
+    public function showAction($url)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('TikitTikitBundle:Petition')->find($id);
-
+        $entity = $em->getRepository('TikitTikitBundle:Petition')->findOneBy(array('petitionUrl' => $url));
+        $id = $entity->getId();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Petition entity.');
         }
@@ -260,5 +258,41 @@ class PetitionController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+    /**
+     * @Route("/petit/{page}", name="petition_petitions")
+     * @Template()
+     */
+    public function petitionsAction($page)
+    {
+        $request = $this->get('request');
+        $page = $request->get('page');
+        $total_count = $this->get('petition_model')->getTotalPetitions();
+        $page = $this->get('util_model')->getPageData($total_count,$page);
+        $petitions = $this->get('petition_model')->getPetitions($page['count_per_page'],$page['offset']);
+        return $this->render('TikitTikitBundle:Petition:petitions.html.twig', array(
+            'current_page'  => $page['page'],
+            'total_pages' => $page['total_pages'],
+            'petitions' => $petitions
+        ));
+    }
+    
+    /**
+     * @Route("/", name="mostpopular")
+     * @Template()
+     */
+    public function mostpopularAction()
+    {
+        $request = $this->get('request');
+        $page = 10;
+        $total_count = $this->get('petition_model')->getTotalPetitions();
+        $page = $this->get('util_model')->getPageData($total_count,$page);
+        $petitions = $this->get('petition_model')->getMostPopularPetitions($page['count_per_page'],$page['offset']);
+        return $this->render('TikitTikitBundle:Petition:petitions.html.twig', array(
+            'current_page'  => $page['page'],
+            'total_pages' => $page['total_pages'],
+            'petitions' => $petitions
+        ));
     }
 }

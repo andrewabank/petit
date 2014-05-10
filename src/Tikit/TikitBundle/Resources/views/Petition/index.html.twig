@@ -19,7 +19,7 @@
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('petition_show', { 'id': entity.id }) }}">{{ entity.petitionTitle }}</a></td>
+                <td><a href="{{ path('petition_show', { 'url': entity.petitionUrl }) }}">{{ entity.petitionTitle }}</a></td>
                 <td>{{ entity.petitionDescription }}</td>
                 <td>{{ entity.petitionUrl }}</td>
                 <td>{{ entity.score }}</td>
@@ -40,12 +40,14 @@
         {% endfor %}
         </tbody>
     </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('petition_create') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+        {#{% if app.user %}#}
+            <ul>
+                <li>
+                    <a href="{{ path('petition_create') }}">
+                        Create a new entry
+                    </a>
+                </li>
+            </ul>
+        {#{% else %}
+        {% endif %}#}
     {% endblock %}

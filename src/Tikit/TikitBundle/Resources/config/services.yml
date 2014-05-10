@@ -12,4 +12,7 @@ services:
     petition.model.petitionmodel:
         class:  Tikit\TikitBundle\Service\PetitionModel
         arguments: ["@doctrine.orm.entity_manager"]
-            
+
+    petition_model:
+        class:  Tikit\TikitBundle\Service\PetitionModel
+        arguments: ["@doctrine.orm.entity_manager"]

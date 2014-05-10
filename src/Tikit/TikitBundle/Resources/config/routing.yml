@@ -1,3 +1,6 @@
+mostpopular:
+    pattern:  /
+    defaults: { _controller: TikitTikitBundle:Petition:mostpopular }
 
 tikit_tikitsss:
     resource: "@TikitTikitBundle/Controller/TikitController.php"
@@ -36,7 +39,7 @@ petition:
     path: /p/index
     defaults:  { _controller: TikitTikitBundle:Petition:index }
 petition_show:
-    path: /p/{id}
+    path: /p/{url}
     defaults:  { _controller: TikitTikitBundle:Petition:show }
 petition_delete:
     path: /p/delete/{id}
@@ -50,4 +53,7 @@ petition_update:
 petition_new:
     path: /p/create
     defaults:  { _controller: TikitTikitBundle:Petition:create }
-    
+
+petition_petitions:
+    path: /petit/{page}
+    defaults:  { _controller: TikitTikitBundle:Petition:petitions }   
