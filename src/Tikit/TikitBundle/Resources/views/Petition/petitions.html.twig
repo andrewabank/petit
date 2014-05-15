@@ -12,8 +12,6 @@
 {% block content %}
         <tbody>
             {%for petition in petitions%}
-                <div class="entry unvoted">
-                    </div>
                     <a class="title loggedin" href="{{ path('petition_show', {'url': petition.0.petitionUrl}) }}" tabindex="1"><h2 id="type-blockquotes">{{petition.0.petitionTitle}}</h2></a>
                     <div class="entry unvoted">
                     <p class="title">
@@ -22,7 +20,6 @@
                     <p class="tagline">поступило <time title="Sun Nov 3 09:19:06 2013 UTC" datetime="2013-11-03T09:19:06+00:00">{{petition.0.dateAdded|date('Y-m-d H:i:s')}}</time> <a href="http://ru.reddit.com/user/jkjkjij22" class="author id-t2_6sczy">{{petition.username}}</a>
                     <span class="userattrs"></span> в <a href="http://ru.reddit.com/r/pics/" class="subreddit hover">pics</a>
                     </p><ul class="flat-list buttons">
-                </div>
                 </div>
             {%endfor%}
         </tbody>
