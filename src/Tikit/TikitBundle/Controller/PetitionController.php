@@ -3,7 +3,9 @@
 namespace Tikit\TikitBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -44,14 +46,29 @@ class PetitionController extends Controller
      */
     public function createAction(Request $request)
     {
+        
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        if (!is_object($user)) {
+
+            $session = $request->getSession();
+            // add flash messages
+            $session->getFlashBag()->add(
+                'warning',
+                'Please login to create petition'
+            );
+            return $this->redirect($this->generateUrl('mostpopular'));
+        } 
         $entity = new Petition();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            
-            $this->get('petition.model.petitionmodel')->addPetition($entity);
-            return $this->redirect($this->generateUrl('petition_show', array('id' => $entity->getId())));
+            //$user_id = $form["user"]->getData();
+            $user = $this->getUser();
+            $user_id = $user->getId();
+            //$entity->setUser($user_id);
+            $this->get('petition.model.petitionmodel')->addPetition($entity, $user_id);
+            return $this->redirect($this->generateUrl('petition_show', array('url' => $entity->getPetitionUrl())));
         }
 
         return array(
@@ -69,16 +86,39 @@ class PetitionController extends Controller
     */
     private function createCreateForm(Petition $entity)
     {
-        $form = $this->createForm(new PetitionType(), $entity, array(
+        //$form = $this->createForm(new EntityType($this->getDoctrine()->getManager()), $entity);
+        $form = $this->createForm(new PetitionType($this->getDoctrine()->getManager()), $entity, array(
             'action' => $this->generateUrl('petition_create'),
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
         return $form;
     }
 
+     /**
+     * @Route("/votepetition/", name="_votepetition")
+     * 
+     */
+    public function votepetitionAction()
+    {
+        if($this->getRequest()->isMethod('post')){
+            //$vote = $this->getRequest()->get('vote',false);
+            $petition_id = $this->getRequest()->get('petition_id',false);
+            $user_id = $this->getRequest()->get('user_id',false);
+
+            $res = $this->get('petition_model')->votePetition($petition_id,$user_id);
+            if($res){
+                $json = array('id' => 1);
+            } else{
+                $json = array('id' => 0);
+            }
+            $json = json_encode($json);
+            $response = new Response($json);
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        }
+    }
+    
     /**
      * Finds and displays a Petition entity.
      *
@@ -91,9 +131,10 @@ class PetitionController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TikitTikitBundle:Petition')->findOneBy(array('petitionUrl' => $url));
-        $id = $entity->getId();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Petition entity.');
+        } else {
+            $id = $entity->getId();
         }
 
         $csrfToken = $this->container->has('form.csrf_provider')
@@ -102,15 +143,33 @@ class PetitionController extends Controller
         $formFactory = $this->container->get('fos_user.registration.form.factory');
         $deleteForm = $this->createDeleteForm($id);
         $form = $formFactory->createForm();
+        $user = $this->getUser();
         //$form = $this->createForm($this->get(new \Acme\UserBundle\Form\Type\RegistrationFormType(), $user));
         $userManager = $this->container->get('fos_user.user_manager');
-        $user = $userManager->createUser();
-        $user->setEnabled(true);
-        $form->setData($user);
+        if (!$user) {
+            $user = $userManager->createUser();
+            $user->setEnabled(true);
+            $form->setData($user);
+        }
+        $ent = $em->getRepository('TikitTikitBundle:PetitionScore')->findOneBy(array('petition' => $entity, 'user' => $user));
+        //$idPs = $ent->getId();
+        if ($ent) {
+            $idPs = $ent->getId();
+            $scored = true;
+        } else {
+            $scored = false;
+        }
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN') == false){
+            $admin = false;
+        } else {
+            $admin = true;
+        }
         return array(
+            'admin' => $admin,
             'entity'      => $entity,
             'csrf_token' => $csrfToken,
             'delete_form' => $deleteForm->createView(),
+            'scored' => $scored,
             'form' => $form->createView()
         );
     }
@@ -267,14 +326,21 @@ class PetitionController extends Controller
     public function petitionsAction($page)
     {
         $request = $this->get('request');
-        $page = $request->get('page');
+        $pageN = $request->get('page');
         $total_count = $this->get('petition_model')->getTotalPetitions();
-        $page = $this->get('util_model')->getPageData($total_count,$page);
+        //http://dev.dbl-a.com/symfony-2-0/symfony2-and-twig-pagination/
+        $quantity = 2;
+        $page = $this->get('util_model')->getPageData($total_count,$pageN,$quantity);
         $petitions = $this->get('petition_model')->getPetitions($page['count_per_page'],$page['offset']);
         return $this->render('TikitTikitBundle:Petition:petitions.html.twig', array(
+            'page_title'  => 'Петиції',
             'current_page'  => $page['page'],
             'total_pages' => $page['total_pages'],
-            'petitions' => $petitions
+            'totalmostpop' => 0,
+            'petitions' => $petitions,
+            'showing_from' => $page['showing_from'],
+            'showing_to' => $page['showing_to'],
+            'total_number' => $total_count
         ));
     }
     
@@ -285,13 +351,12 @@ class PetitionController extends Controller
     public function mostpopularAction()
     {
         $request = $this->get('request');
-        $page = 10;
-        $total_count = $this->get('petition_model')->getTotalPetitions();
-        $page = $this->get('util_model')->getPageData($total_count,$page);
-        $petitions = $this->get('petition_model')->getMostPopularPetitions($page['count_per_page'],$page['offset']);
+        $petitions = $this->get('petition_model')->getMostPopularPetitions(50,0);
         return $this->render('TikitTikitBundle:Petition:petitions.html.twig', array(
-            'current_page'  => $page['page'],
-            'total_pages' => $page['total_pages'],
+            'page_title'  => '50 найрейтинговіших петицій',
+            'current_page'  => 1,
+            'total_pages' => 1,
+            'totalmostpop' => 1,
             'petitions' => $petitions
         ));
     }

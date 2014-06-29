@@ -48,9 +48,8 @@ class RegistrationController extends BaseController
             if ($form->isValid()) {
                 global $kernel;    
                 $someService = $kernel->getContainer()->get('petition.model.petitionmodel');
-                $tikitid = $form["petition"]->getData();
+                $petitionId = $form["petition"]->getData();
                 //var_dump($someService);
-                $someService->votePetition(2,1,1);
                 
                 $event = new FormEvent($form, $request);
                 $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
@@ -64,13 +63,33 @@ class RegistrationController extends BaseController
 
                 $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
 
+                $someService->preUserApprovedVote($petitionId,$user,1);
+                //$res = $someService->postUserApprovedVote($user);
                 return $response;
             }
         }
-
+ 
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register.html.'.$this->getEngine(), array(
             'form' => $form->createView(),
         ));
     }
+
+    /**
+     * Tell the user his account is now confirmed
+     */
+    public function confirmedAction()
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+        global $kernel;
+        $someService = $kernel->getContainer()->get('petition.model.petitionmodel');
+        $res = $someService->postUserApprovedVote($user);
+        return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:confirmed.html.'.$this->getEngine(), array(
+            'user' => $user,
+        ));
+    }
+       
 }
 

@@ -59,6 +59,7 @@ class Petition
     public function __construct()
     {
         $this->dateAdded = new \DateTime('now');
+        //$this->user = null;
     }
     /**
      * Set petitionTitle

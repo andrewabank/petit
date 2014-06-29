@@ -27,6 +27,7 @@ class User extends BaseUser
         parent::__construct();
         // your own logic
         $this->roles = array('ROLE_USER');
+        $this->petition = 0;
     }
     // override methods for username and tie them with email field
 

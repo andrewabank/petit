@@ -7,8 +7,9 @@ use FOS\UserBundle\Event\FormEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Tikit\TikitBundle\Service\TikitModel as TikitModel;
+use Tikit\TikitBundle\Service\PetitionModel;
 /**
  * Listener responsible to change the redirection at the end of the password resetting
  */
@@ -26,11 +27,14 @@ class RegistrationSuccessListener implements EventSubscriberInterface
      */
     private $someService;
     private $em;
+    public $securityContext;
 
-    public function __construct($entityManager)
+    public function __construct(ContainerInterface $container, $entityManager)
     {
+        $securityContext = $container->get('security.context');
+        $this->securityContext = $securityContext;
         $this->em = $entityManager;
-        $someService = new TikitModel($this->em);
+        $someService = new PetitionModel($this->em);
         $this->someService = $someService;
     }
     
@@ -43,7 +47,8 @@ class RegistrationSuccessListener implements EventSubscriberInterface
 
     public function onRegistrationSuccess()
     {
-        //$this->someService->voteTikit(1,1,1);
+        $user = $this->securityContext->getToken()->getUser();
+        //$this->someService->postUserApprovedVote($user);
     }
 }
 

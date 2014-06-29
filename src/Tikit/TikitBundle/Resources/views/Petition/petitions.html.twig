@@ -1,6 +1,6 @@
-{% extends "TikitTikitBundle::layout_boots.html.twig" %}
+{% extends "TikitTikitBundle::layout_atro.html.twig" %}
 
-{% block title "Symfony - Tikits" %}
+{% block title %}{{ page_title }}{% endblock %}
 
 {% block javascripts %}
     <script src="{{ asset('/js/jquery.min.js') }}"></script>
@@ -10,38 +10,97 @@
 {% endblock %}
 
 {% block content %}
-        <tbody>
-            {%for petition in petitions%}
-                    <a class="title loggedin" href="{{ path('petition_show', {'url': petition.0.petitionUrl}) }}" tabindex="1"><h2 id="type-blockquotes">{{petition.0.petitionTitle}}</h2></a>
-                    <div class="entry unvoted">
-                    <p class="title">
-                    <a class="title loggedin" href="{{petition.0.petitionUrl}}" tabindex="1">{{petition.0.petitionTitle}}</a>
-                    <span class="domain">(<a href="/domain/i.imgur.com/">i.imgur.com</a>)</span></p><span>{{petition.0.score}}</span>
-                    <p class="tagline">поступило <time title="Sun Nov 3 09:19:06 2013 UTC" datetime="2013-11-03T09:19:06+00:00">{{petition.0.dateAdded|date('Y-m-d H:i:s')}}</time> <a href="http://ru.reddit.com/user/jkjkjij22" class="author id-t2_6sczy">{{petition.username}}</a>
-                    <span class="userattrs"></span> в <a href="http://ru.reddit.com/r/pics/" class="subreddit hover">pics</a>
-                    </p><ul class="flat-list buttons">
-                </div>
-            {%endfor%}
-        </tbody>
+{% for label, flashes in app.session.flashbag.all %}
+    {% for flash in flashes %}
+        <div class="alert">
+            {{ flash }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+{%for petition in petitions%}
+<div class="row">
+    <div class="col-md-12">
+    <h4>
+        <a class="styleColor" href="{{ path('petition_show', {'url': petition.0.petitionUrl}) }}">{{petition.0.petitionTitle}}</a>
+    </h4>
+    <p>{{ petition.0.petitionDescription|length > 500 ? petition.0.petitionDescription|slice(0, 300) ~ ' ..... ' : petition.0.petitionDescription  }}
+    <small class="block styleSecondColor">{{petition.0.dateAdded|date('Y-m-d H:i:s')}}</small>
+    </p>
+    <p>адресат: <a href="http://ru.reddit.com/r/pics/" class="subreddit hover">pics</a></p>
+    <small class="block styleCoor fsize13">
+        <span class="label label-default light"> {{petition.0.score }} Голосів</span>
+    </small>
+    </div>
+</div>
+<!-- article summary -->
+<hr class="half-margins">
+<!-- separator -->
+{%endfor%}
         {% if app.user %}
             <input type="hidden" name="user_id" id="user_id" value="{{ app.user.id }}">
-        {% else %}
         {% endif %}
-        <div class="span4">
-            {%if total_pages > 0%}
-                <div class="pagination">
-                    {%for i in 1..total_pages%}
-                    <ul>
-                        {%if loop.first%}
-                            <li class="prev {%if current_page==1%} disabled{%endif%}"><a href="#"><-Previous</a></li>
-                        {%endif%}
-                        <li {%if current_page==loop.index%}class="active"{%endif%}><a href="">{{loop.index}}</a></li>
-                        {%if loop.last%}
-                            <li class="next {%if current_page==total_pages%} disabled{%endif%}"><a href="#">Next-></a></li>
-                        {%endif%}
-                    </ul>
-                    {%endfor%}
-                </div>
-            {%endif%}
+        <!-- PAGINATION -->
+        {% if totalmostpop %}
+        {% else %}
+        <div class="row">
+
+            <div class="col-md-4 text-left responsive-text-center">
+                <p class="hidden-xs pull-left nomargin padding30"><strong>Показуємо</strong> {{ showing_from }}-{{ showing_to }} з {{ total_number }} знайдених.</p>
+            </div>
+            <div class="col-md-6 text-right">
+{% if total_pages > 1 %}
+{% set current_filters = { '': '' } %}
+{% set extremePagesLimit = 3 %}
+{% set nearbyPagesLimit = 2 %}
+
+<ul class="pagination" id="{{ current_page }}">
+    {% if current_page > 1 %}
+        <li class="prev {%if current_page==1%} disabled{%endif%}"><a href="{{path('petition_petitions', {page: current_page-1}) }}"><i class="fa fa-chevron-left">Попередня</i></a></li>
+    {% endif %}
+
+    {% for i in range(1, extremePagesLimit) if ( i < current_page-nearbyPagesLimit ) %}
+        <li><a href="{{path('petition_petitions', {page: i}) }}">{{ i }}</a></li>
+    {% endfor %}
+
+    {% if extremePagesLimit + 1 < current_page - nearbyPagesLimit %}
+        <span class="sep-dots">...</span>
+    {% endif %}
+
+    {% for i in range(current_page-nearbyPagesLimit, current_page-1) if ( i > 0 ) %}
+        <li><a href="{{path('petition_petitions', {page: i}) }}">{{ i }}</a></li>
+    {% endfor %}
+    <li class="active"><a href="{{ path('petition_petitions', { page: current_page }) }}">{{ current_page }}</a></li>
+
+    {% if (current_page < total_pages) %}
+        {% for i in range(current_page+1, total_pages) %}
+            {% if ( loop.index <= nearbyPagesLimit and i <= total_pages ) %}
+                <li><a href="{{ path('petition_petitions', {page: i}) }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if  (total_pages - extremePagesLimit) > (current_page + nearbyPagesLimit ) %}
+            <span class="sep-dots">...</span>
+        {% endif %}
+
+        {% for i in range(total_pages-extremePagesLimit+1, total_pages) if ( i > current_page+nearbyPagesLimit ) %}
+            <li><a href="{{ path('petition_petitions', {page: i}) }}">{{ i }}</a></li>
+        {% endfor %}
+    {% endif %}
+
+    {% if current_page < total_pages %}
+            <li class="next {%if current_page==total_pages %} disabled{%endif%}"><a href="{{ path('petition_petitions', {page: current_page+1}) }}"><i class="fa fa-chevron-right">Наступна</i></a></li>
+    {% endif %}
+
+    {% if (current_page == total_pages) %}
+    {% endif %}
+            
+</ul>
+{% endif %}                
+
+            </div>
         </div>
+        {% endif %}
+        <!-- /PAGINATION -->
+        
 {% endblock %}

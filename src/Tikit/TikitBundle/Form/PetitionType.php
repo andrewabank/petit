@@ -8,7 +8,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class PetitionType extends AbstractType
 {
-        /**
+    public function __construct($em) {
+        $this->em = $em;
+    }
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
@@ -16,11 +19,18 @@ class PetitionType extends AbstractType
     {
         $builder
             ->add('petitionTitle')
-            ->add('petitionDescription')
+            ->add('petitionDescription','textarea')
             //->add('petitionUrl', 'hidden', array('mapped' => false))
             //->add('dateAdded')
-            ->add('user', 'hidden')
-            ->add('category')
+            //->add('user', 'hidden')
+            ->add('category', 'entity', array(
+    'class' => 'TikitTikitBundle:Category',
+    'property'=>'categoryName',
+    'label' => 'Адресат*: ',
+    'attr'=>array('style'=>'width:300px'),
+    'required' => false,
+    'data'=>$this->em->getReference("TikitTikitBundle:Category",1) ))
+            //->add('submit', 'submit', array('label' => 'Зберегти', 'attr' => array('class' => 'save')));
         ;
     }
     

@@ -35,9 +35,13 @@ class PetitionScore
     private $vote;
 
 
-    public function __construct($petition_id,$user_id,$vote)
+    public function __construct($petition_id,$user_id,$vote,$emptyDate = false)
     {
-        $this->dateAdded = new \DateTime('now');
+        if ($emptyDate) {
+            $this->dateAdded = new \DateTime('0000-00-00 00:00:00');
+        } else {
+            $this->dateAdded = new \DateTime('now');
+        }
         $this->vote = $vote;
         $this->user = $user_id;
         $this->petition = $petition_id;

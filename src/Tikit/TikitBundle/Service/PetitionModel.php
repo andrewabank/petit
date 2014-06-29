@@ -24,12 +24,13 @@ class PetitionModel
         $this->em = $entityManager;
     }
 
-    public function addPetition($entity)
+    public function addPetition($entity, $user_id)
     {       
         //$em = $this->getDoctrine()->getManager();
         $this->setPetitionUrlModel($entity);
+        $user = $this->em->getRepository('\Tikit\TikitBundle\Entity\FosUser')->findOneBy(array('id' => $user_id));
+        $entity->setUser($user);
         $this->em->persist($entity);
-        $user = $entity->getUser();
         $petition_score = new PetitionScore($entity,$user,1);
         $petition_score->setPetition($entity);
         $petition_score->setUser($user);
@@ -158,31 +159,75 @@ class PetitionModel
 	return $options['lowercase'] ? mb_strtolower($str, 'UTF-8') : $str;  
     }
         
-    
-    public function votePetition($petition_id,$user_id,$vote)
+    public function getPetitionFromReferer($referer)
     {
+        $referer = str_replace('http://petit/app_dev.php/p/', "", $referer);;
+        $petition = $this->em->getRepository('\Tikit\TikitBundle\Entity\Petition')->findOneBy(array('petitionUrl' => $referer));
+        return $petition->getId();
+    }
+
+    public function votePetition($petition_id,$user_id)
+    {
+        $vote = 1;
         $petitionscore = $this->em->getRepository('\Tikit\TikitBundle\Entity\PetitionScore')->findOneBy(array('user' => $user_id, 'petition' => $petition_id));
-        if($petitionscore){
-            if($petitionscore->getVote() == $vote)
-                return 0;
-            $petitionscore->setVote($vote);
-            if ($vote == -1) {
-                $vote = -2;
-            } elseif ($vote == 1) {
-                $vote = 2;
-            }
-        } else {
+        if(!$petitionscore){
+            $petition = $this->em->find('\Tikit\TikitBundle\Entity\Petition', $petition_id);
+            $petition->setScore($petition->getScore() + $vote);
             $petitionscore = new PetitionScore($petition_id,$user_id,$vote);
+            $petitionscore->setPetition($petition);
+            $user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', $user_id);
+            $petitionscore->setUser($user);
+            $this->em->persist($petitionscore);
+            $this->em->persist($petition);
+            $this->em->flush();
+            return 1;
         }
-        $petition = $this->em->find('\Tikit\TikitBundle\Entity\Petition', $petition_id);
-        $petition->setScore($petition->getScore() + $vote);
-        $petitionscore->setPetition($petition);
-        $user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', $user_id);
-        $petitionscore->setUser($user);
-        $this->em->persist($petitionscore);
-        $this->em->persist($petition);
-        $this->em->flush();
-        return 1;
+        return 0;
+    }
+
+    public function preUserApprovedVote($petitionId, $user, $vote)
+    {
+        $user_id = $user->getId();
+        $petitionscore = $this->em->getRepository('\Tikit\TikitBundle\Entity\PetitionScore')->findOneBy(array('user' => $user_id, 'petition' => $petitionId));
+        if(!$petitionscore){
+            //$petition = $this->em->find('\Tikit\TikitBundle\Entity\Petition', $petitionId);
+            //$petition->setScore($petition->getScore() + $vote);
+            $petitionscore = new PetitionScore($petitionId, $user_id, $vote, true);
+            
+            $petition = $this->em->find('\Tikit\TikitBundle\Entity\Petition', $petitionId);
+            $petitionscore->setPetition($petition);
+            $user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', $user_id);
+            $petitionscore->setUser($user);
+            //$petitionscore->setPetition($petition);
+            //$petitionscore->setUser($user);
+            $this->em->persist($petitionscore);
+            //$this->em->persist($petition);
+            $this->em->flush();
+            return 1;
+        }
+        return 0;
+    }
+
+    public function postUserApprovedVote($user)
+    {
+        $user_id = $user->getId();
+        $petitionscore = $this->em->getRepository('\Tikit\TikitBundle\Entity\PetitionScore')->findOneBy(array('user' => $user_id));
+        if($petitionscore){
+            $petition = $petitionscore->getPetition();
+            //$petition = $this->em->find('\Tikit\TikitBundle\Entity\Petition', $petitionId);
+            $petition->setScore($petition->getScore() + 1);
+            $dateAdded = new \DateTime('now');
+            $petitionscore->setDateAdded($dateAdded);
+            //$petitionscore = new PetitionScore($petitionId, $user_id, $vote, true);
+            //$petitionscore->setPetition($petition);
+            //$user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', $user_id);
+            //$petitionscore->setUser($user);
+            $this->em->persist($petitionscore);
+            $this->em->persist($petition);
+            $this->em->flush();
+            return 1;
+        }
+        return 0;
     }
 
     public function getPetitions($count_per_page,$offset)
@@ -213,9 +258,9 @@ class PetitionModel
     
     public function getTotalPetitions()
     {
-        $count = $this->em->createQuery('SELECT COUNT(DISTINCT t.id) FROM \Tikit\TikitBundle\Entity\Petition t WHERE t.status = 1')
-                    ->getSingleResult();
-        return $count[1];
+        $count = $this->em->createQuery('SELECT COUNT(p.id) FROM Tikit\TikitBundle\Entity\Petition p WHERE p.status = 1')
+                    ->getSingleScalarResult();
+        return $count;
     }
     
 }

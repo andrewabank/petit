@@ -1,15 +1,69 @@
-{% extends 'TikitTikitBundle::layout_boots.html.twig' %}
+{% extends '::base.html.twig' %}
+
+{% form_theme form _self %}
+{% block text_widget %}
+        {% set type = type|default('text') %}
+<input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" data-msg-required="Будь-ласка введіть заголовок" class="form-control" placeholder="Заголовок" />
+{% endblock %}
+{% block textarea_widget %}
+        {% set type = type|default('textarea') %}
+<textarea rows="7" cols="50" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="Петиція"></textarea>
+{% endblock %}
+
+
+{% block text_label %}
+<label>Заголовок*</label>
+{% endblock %}
+{% block textarea_label %}
+<label>Петиція*</label>
+{% endblock %}
+{% block select_label %}
+<label>Заголовок*</label>
+{% endblock %}
 
 {% block content -%}
-    <h1>Petition creation</h1>
 
-    {{ form(form) }}
+<div class="col-md-12">
+    <h2>Drop us a line or just say <strong><em>Hello!</em></strong></h2>
+    <form action="{{ path('petition_create') }}" method="POST" class="bs-example form-horizontal">
+    {# {{ form_widget(form) }} #}
+        <fieldset>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-12">
+        {{ form_label(form.petitionTitle) }}
+        {{ form_widget(form.petitionTitle) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-12">
+        {{ form_label(form.petitionDescription) }}
+        {{ form_widget(form.petitionDescription) }}
+                    </div>
+                </div>
+            </div>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('petition') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-12">
+            {{ form_rest(form) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="submit" value="Зберегти" class="btn btn-primary btn-lg" data-loading-text="Loading...">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<a href="{{ path('petition') }}">
+    Back to the list
+</a>
 {% endblock %}
