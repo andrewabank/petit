@@ -1,3 +1,4 @@
 security:
     login:
-        username: "Ваш email:"
+        username: "E-mail:*"
+        password: "Пароль:*"

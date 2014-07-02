@@ -1,7 +1,7 @@
 {% extends 'TikitTikitBundle::layout_atro.html.twig' %}
 
 {% block title %}
-Petition - {{ entity.petitionTitle }}
+Петиція - {{ entity.petitionTitle }}
 {% endblock %}
     {% block stylesheets %}
 <link href="{{ asset('/css/tikit/style.css') }}" rel="stylesheet" type="text/css" />
@@ -78,13 +78,17 @@ Petition - {{ entity.petitionTitle }}
                 data: inputs,
                 success: function(data) {
                     if (data.has_error) {
-                        // Insert your error process
                         alert(data.error);
                     }
                     else {
-                        // Insert your success process
-                        alert('Welcome ' + data.username + ' !');
-                        window.location = data.target_path;
+                        $('#control').hide();
+                        if (data.ok) {
+                            alert("Для завершення реєстрації і зарахування вашого голосу перевірте ваш імейл");
+                        } else {
+                            $('#signed-button').show();
+                        }
+                        //alert('Welcome ' + data.username + ' !');
+                        //window.location = data.target_path;
                     }
                 }
             });
@@ -97,23 +101,23 @@ Petition - {{ entity.petitionTitle }}
 {% block email_widget %}
 <div class="col-lg-10">
         {% set type = type|default('email') %}
-    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="Email" />
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="" />
 </div>
 {% endblock %}
 {% block text_widget %}
 <div class="col-lg-10">
         {% set type = type|default('text') %}
-    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="Username" />
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="" />
 </div>
 {% endblock %}
 {% block password_widget %}
 <div class="col-lg-10">
         {% set type = type|default('password') %}
-    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="Password" />
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="" />
 </div>
 {% endblock %} 
 
-{% block email_label %}
+{# {% block email_label %}
 <label class="col-lg-2 control-label required" >Email:</label>
 {% endblock %}
 {% block text_label %}
@@ -121,7 +125,7 @@ Petition - {{ entity.petitionTitle }}
 {% endblock %}
 {% block password_label %}
 <label class="col-lg-2 control-label required" >Password:</label>
-{% endblock %}
+{% endblock %} #}
 
 {% block body -%}
 
@@ -153,11 +157,6 @@ Petition - {{ entity.petitionTitle }}
 
 {% if app.user == false %}             
 <div id="control" class="form-sign"><!-- CONTROL DIV -->
-    <div class="suporter-otherwise">
-        <b>Зареєстровані?</b><br>Введіть імейл і натисніть "Голосувати".
-    </div>
-
-    <div class="suporter-otherwise"><b>Перший раз тут?</b> Заповніть форму нижче.</div>
 
     <div class="col-lg-6">
         <div class="well">
@@ -183,7 +182,7 @@ Petition - {{ entity.petitionTitle }}
                         </div>
                     </div>
                     <div class="col-lg-10 col-lg-offset-2">
-                        <input type="submit" id="_submit" class="btn btn-primary" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
+                        <input type="submit" id="_submit" class="btn btn-primary" name="_submit" value="Підписати" />
                     </div>
                 </fieldset>
             </form>
@@ -198,24 +197,24 @@ Petition - {{ entity.petitionTitle }}
                 <fieldset>
                     <legend>Перший раз? Заповніть форму і натисніть "Підписати"</legend>
                     <div class="form-group">
-        {{ form_label(form.email) }}
+        {{ form_label(form.email, 'E-mail:*', {'label': 'E-mail', 'label_attr': {'class': 'col-lg-2 control-label required'}}) }}
         {{ form_widget(form.email) }}
                     </div>
                     <div class="form-group">
-        {{ form_label(form.name) }}
+        {{ form_label(form.name, "Ім'я:*", {'label': "Ім'я", 'label_attr': {'class': 'col-lg-2 control-label required'}}) }}
         {{ form_widget(form.name) }}
                     </div>
                     <div class="form-group">
-        {{ form_label(form.plainPassword.first) }}
+        {{ form_label(form.plainPassword.first, 'Пароль:*', {'label': 'Пароль', 'label_attr': {'class': 'col-lg-2 control-label required'}}) }}
         {{ form_widget(form.plainPassword.first) }}
                     </div>
                     <div class="form-group">
-        {{ form_label(form.plainPassword.second) }}
+        {{ form_label(form.plainPassword.second, 'Пароль повторно:*', {'label': 'Пароль повторно', 'label_attr': {'class': 'col-lg-2 control-label required'}}) }}
         {{ form_widget(form.plainPassword.second) }}
                     </div>
   {{ form_rest(form) }}
                     <div class="col-lg-10 col-lg-offset-2">
-                        <input type="submit" value="Register" name="submit" class="btn btn-primary" id="submit">
+                        <input type="submit" value="Підписати" name="submit" class="btn btn-primary" id="submit">
                     </div>
                 </fieldset>
             </form>
@@ -225,11 +224,11 @@ Petition - {{ entity.petitionTitle }}
 {% else %}
    {% if scored == false %}
 <a href="javascript:void(0)" id="source-button" class="btn btn-default">Підписати петицію</a>
-<p id="signed-button" class="btn btn-default" style="display:none;">Ви уже підписали</p>
    {% else %}
 <p class="btn btn-default">Ви уже підписали</p> Дякуємо. Можете поширити!
    {% endif %}  
-{% endif %}                    
+{% endif %}
+<p id="signed-button" class="btn btn-default" style="display:none;">Ви уже підписали</p>                    
 <!-- modal content -->
 <div id="basic-modal-content">
     <h3>Поширити петицію.</h3>

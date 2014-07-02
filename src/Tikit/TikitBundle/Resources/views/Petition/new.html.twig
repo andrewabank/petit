@@ -24,7 +24,7 @@
 {% block content -%}
 
 <div class="col-md-12">
-    <h2>Drop us a line or just say <strong><em>Hello!</em></strong></h2>
+    <h2>Створіть Вашу петицію, і поширте її серед друзів!</h2>
     <form action="{{ path('petition_create') }}" method="POST" class="bs-example form-horizontal">
     {# {{ form_widget(form) }} #}
         <fieldset>
@@ -62,8 +62,4 @@
         </fieldset>
     </form>
 </div>
-
-<a href="{{ path('petition') }}">
-    Back to the list
-</a>
 {% endblock %}

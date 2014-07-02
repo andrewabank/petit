@@ -215,16 +215,18 @@ class PetitionModel
         if($petitionscore){
             $petition = $petitionscore->getPetition();
             //$petition = $this->em->find('\Tikit\TikitBundle\Entity\Petition', $petitionId);
-            $petition->setScore($petition->getScore() + 1);
-            $dateAdded = new \DateTime('now');
-            $petitionscore->setDateAdded($dateAdded);
-            //$petitionscore = new PetitionScore($petitionId, $user_id, $vote, true);
-            //$petitionscore->setPetition($petition);
-            //$user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', $user_id);
-            //$petitionscore->setUser($user);
-            $this->em->persist($petitionscore);
-            $this->em->persist($petition);
-            $this->em->flush();
+            if ($petition) {
+                $petition->setScore($petition->getScore() + 1);
+                $dateAdded = new \DateTime('now');
+                $petitionscore->setDateAdded($dateAdded);
+                //$petitionscore = new PetitionScore($petitionId, $user_id, $vote, true);
+                //$petitionscore->setPetition($petition);
+                //$user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', $user_id);
+                //$petitionscore->setUser($user);
+                $this->em->persist($petitionscore);
+                $this->em->persist($petition);
+                $this->em->flush();
+            }
             return 1;
         }
         return 0;

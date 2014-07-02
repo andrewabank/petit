@@ -1,59 +1,65 @@
 {% extends "::base.html.twig" %}
+{% block title %}
+Реєстрація на сайті
+{% endblock %}
 
 {% form_theme form _self %}
 {% block email_widget %}
 <div class="col-lg-10">
         {% set type = type|default('email') %}
-    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="Email" />
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="" />
 </div>
 {% endblock %}
 {% block text_widget %}
 <div class="col-lg-10">
         {% set type = type|default('text') %}
-    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="Username" />
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="" />
 </div>
 {% endblock %}
 {% block password_widget %}
 <div class="col-lg-10">
         {% set type = type|default('password') %}
-    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="Password" />
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" class="form-control" placeholder="" />
 </div>
 {% endblock %} 
 
-{% block email_label %}
-<label class="col-lg-2 control-label required" >Email:</label>
+{#{% block email_label %}
+<label class="col-lg-2 control-label required" >E-mail:</label>
 {% endblock %}
 {% block text_label %}
-<label class="col-lg-2 control-label required" >Username:</label>
+<label class="col-lg-2 control-label required" >Ім'я:</label>
 {% endblock %}
 {% block password_label %}
-<label class="col-lg-2 control-label required" >Password:</label>
-{% endblock %}
+<label class="col-lg-2 control-label required" ></label>
+{% endblock %} #}
 
 {% block content %}
 <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
     
                     <fieldset>
-                    <legend>Перший раз? Заповніть форму і натисніть "Підписати"</legend>
+        {{ form_errors(form) }}
                     <div class="form-group">
-        {{ form_label(form.email) }}
+        {{ form_label(form.email, 'E-mail:*', {'label': 'E-mail', 'label_attr': {'class': 'col-lg-2 control-label required'}}) }}
         {{ form_widget(form.email) }}
                     </div>
                     <div class="form-group">
-        {{ form_label(form.name) }}
+                        
+        {{ form_label(form.name, "Ім'я:*", {'label': "Ім'я", 'label_attr': {'class': 'col-lg-2 control-label required'}}) }}
         {{ form_widget(form.name) }}
                     </div>
                     <div class="form-group">
-        {{ form_label(form.plainPassword.first) }}
+        {{ form_label(form.plainPassword.first, 'Пароль:*', {'label': 'Пароль', 'label_attr': {'class': 'col-lg-2 control-label required'}}) }}
         {{ form_widget(form.plainPassword.first) }}
                     </div>
                     <div class="form-group">
-        {{ form_label(form.plainPassword.second) }}
+        {{ form_label(form.plainPassword.second, 'Пароль повторно:*', {'label': 'Пароль повторно', 'label_attr': {'class': 'col-lg-2 control-label required'}}) }}
+        {# {{ form_label(form.plainPassword.second) }} #}
         {{ form_widget(form.plainPassword.second) }}
                     </div>
   {{ form_rest(form) }}
                     <div class="col-lg-10 col-lg-offset-2">
-                        <input type="submit" value="{{ 'registration.submit'|trans }}" name="submit" class="btn btn-primary" id="submit">
+                        <input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" name="submit" class="btn btn-primary" id="submit">
+                        <!--<input type="submit" value="{# {{ 'Зберегти' }} #}" name="submit" class="btn btn-primary" id="submit"> -->
                     </div>
                     </fieldset>
 </form>
