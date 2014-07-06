@@ -27,7 +27,7 @@
 
 			/* two columns */
 			header#topNav nav.mega-menu ul.nav-main li.mega-menu-two-columns ul.dropdown-menu {
-				min-width:350px;
+				min-width:220px;
 			}
 			header#topNav nav.mega-menu ul.nav-main li.mega-menu-two-columns ul.dropdown-menu ul.dropdown-menu {
 				top:4px;

@@ -9,7 +9,6 @@
 <link href="{{ asset('/css/simplemodal/basic_ie.css') }}" rel="stylesheet" type="text/css" />
 {% endblock%}
 {% block javascripts %}
-<script src="{{ asset('/js/jquery.min.js') }}"></script>
 <script src="{{ asset('/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('/js/bootswatch.js') }}"></script>
 <script src="{{ asset('/js/plugins/simplemodal/jquery.simplemodal.js') }}"></script>
@@ -26,8 +25,21 @@
 <script type="text/javascript">
     $(function()
     {
+        $("#share a").jqSocialSharer({
+      "popUpWidth" : 600,               
+      "popUpHeight": 500,               
+      "popUpTop"   : 100,               
+      "useCurrentLocation" : true       
+    }); 
+    $("#Xshare a").jqSocialSharer();
         //document.getElementById('password').setCustomValidity('Будь-ласка введіть пароль');
         //document.getElementById('username').setCustomValidity('Будь-ласка введіть email');
+        $( "#share a" ).click(function() {
+            $.modal.close();
+        });
+        $( "#Xshare a" ).click(function() {
+            $.modal.close();
+        });
         $('#source-button').click(function (e) {
             $('#basic-modal-content').modal();
             var sendInfo = {
@@ -230,42 +242,27 @@
 {% endif %}
 <p id="signed-button" class="btn btn-default" style="display:none;">Ви уже підписали</p>                    
 <!-- modal content -->
-<div id="basic-modal-content">
-    <h3>Поширити петицію.</h3>
-    <p>Нехай більше людей підтримає її, і наш голос буде почутий!</p>
 
-    <div class="primary-shares" id="sharer">                    
-        <div class="fb-share-button" data-width="300" data-type="box_count"></div>
-        <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://dev.twitter.com/pages/tweet_button" data-via="your_screen_name" data-lang="en" data-related="anywhereTheJavascriptAPI" data-count="vertical">Tweet</a>
-        <script>!function(d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (!d.getElementById(id)) {
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = "https://platform.twitter.com/widgets.js";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }
-            }(document, "script", "twitter-wjs");</script>
-    </div>
+<div id="Xshare">
+    <a href="javascript:void(0)" class="twitter" data-social="{'type':'twitter', 'url':'http://code-tricks.com/51-best-jquery-plugins/', 'text': '51 Best jQuery Plugins'}" title="code-tricks">Share on Twitter</a>
+    <br>
+    <a href="javascript:void(0)" class="facebook" data-social="{'type':'facebook', 'url':'http://code-tricks.com/51-best-jquery-plugins/', 'text': '51 Best jQuery Plugins'}" title="code-tricks">Share on facebook</a>
+    <br>
+    <a href="javascript:void(0)" class="plusone" data-social="{'type':'plusone', 'url':'http://code-tricks.com/51-best-jquery-plugins/', 'text': '51 Best jQuery Plugins'}" title="code-tricks">Share on Google Plus</a>
+    <br>
+    <a href="javascript:void(0)" class="pinterest" data-social="{'type':'pinterest', 'url':'http://code-tricks.com/51-best-jquery-plugins/', 'text': '51 Best jQuery Plugins', 'image': 'http://code-tricks.com/wp-content/uploads/2013/05/Simple-Multi-Item-Slider-with-CSS-Animations-and-jQuery-code-tricks.jpg'}" title="code-tricks">Pin it</a>
     
-    <p><a href='http://www.ericmmartin.com/projects/simplemodal/'>Дякую, завершити...</a></p>
+  </div>
+<div id="basic-modal-content">
+    <!-- <h3>Поширити петицію.</h3> -->
+<div id="share">
+    <a href="javascript:void(0)" class="facebook" data-social='{"type":"facebook", "url":"http://code-tricks.com/51-best-jquery-plugins/", "text": "51 Best jQuery Plugins"}' title="code-tricks"><img src="{{ asset('img/basic/facebook_1.png') }}"></a> 
+    <a href="javascript:void(0)" class="twitter" data-social='{"type":"twitter", "url":"http://code-tricks.com/51-best-jquery-plugins/", "text": "51 Best jQuery Plugins"}' title="code-tricks"><img src="{{ asset('img/basic/twitter_1.jpg') }}"></a>
+    <a href="javascript:void(0)" class="plusone" data-social='{"type":"plusone", "url":"http://code-tricks.com/51-best-jquery-plugins/", "text": "51 Best jQuery Plugins"}' title="code-tricks"><img src="{{ asset('img/basic/gplus_1.jpg') }}"></a>
+  </div>
 </div>
 
 <hr class="half-margins">
-
-<div class="primary-shares" id="sharer">                    
-    <div class="fb-share-button" data-width="300" data-type="box_count"></div>
-    <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://dev.twitter.com/pages/tweet_button" data-via="your_screen_name" data-lang="en" data-related="anywhereTheJavascriptAPI" data-count="vertical">Tweet</a>
-    <script>!function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (!d.getElementById(id)) {
-                js = d.createElement(s);
-                js.id = id;
-                js.src = "https://platform.twitter.com/widgets.js";
-                fjs.parentNode.insertBefore(js, fjs);
-            }
-        }(document, "script", "twitter-wjs");</script>
-</div>
                 {% if app.user and admin %}
 
 <ul class="record_actions">

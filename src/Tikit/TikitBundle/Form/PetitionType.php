@@ -18,18 +18,24 @@ class PetitionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('petitionTitle')
+            ->add('petitionTitle', 'text', array(
+                'label' => 'Заголовок*:' ))
             ->add('petitionDescription','textarea')
             //->add('petitionUrl', 'hidden', array('mapped' => false))
             //->add('dateAdded')
             //->add('user', 'hidden')
             ->add('category', 'entity', array(
-    'class' => 'TikitTikitBundle:Category',
-    'property'=>'categoryName',
-    'label' => 'Адресат*: ',
-    'attr'=>array('style'=>'width:300px'),
-    'required' => false,
-    'data'=>$this->em->getReference("TikitTikitBundle:Category",1) ))
+                'class' => 'TikitTikitBundle:Category',
+                'property'=>'categoryName',
+                'label' => 'Адресат*: ',
+                'attr'=>array('style'=>'width:300px'),
+                'required' => false,
+                'data'=>$this->em->getReference("TikitTikitBundle:Category",1) ))
+            ->add('captcha', 'captcha', array(
+                'label' => 'Капча*: ',
+                'width' => 200,
+                'height' => 50,
+                'length' => 6 ))
             //->add('submit', 'submit', array('label' => 'Зберегти', 'attr' => array('class' => 'save')));
         ;
     }

@@ -3,7 +3,7 @@
 {% form_theme form _self %}
 {% block text_widget %}
         {% set type = type|default('text') %}
-<input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" data-msg-required="Будь-ласка введіть заголовок" class="form-control" placeholder="Заголовок" />
+<input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} required="required" data-msg-required="Будь-ласка введіть заголовок" class="form-control" placeholder="" />
 {% endblock %}
 {% block textarea_widget %}
         {% set type = type|default('textarea') %}
@@ -11,9 +11,9 @@
 {% endblock %}
 
 
-{% block text_label %}
+{# {% block text_label %}
 <label>Заголовок*</label>
-{% endblock %}
+{% endblock %} #}
 {% block textarea_label %}
 <label>Петиція*</label>
 {% endblock %}
@@ -45,6 +45,14 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        {{ form_label(form.captcha, 'Уведіть в поле текст з малюнку:*', {'label': 'Капча'}) }}
+                        {{ form_widget(form.captcha) }}
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="form-group">
                     <div class="col-md-12">
