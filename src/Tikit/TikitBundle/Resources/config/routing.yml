@@ -57,6 +57,9 @@ petition_new:
 petition_petitions:
     path: /petit/{page}
     defaults:  { _controller: TikitTikitBundle:Petition:petitions }   
+bycategory:
+    path: /category/{category}
+    defaults:  { _controller: TikitTikitBundle:Petition:bycategory } 
 
 _votepetition:
     path: /votepetition

@@ -148,11 +148,11 @@
     {% if app.user %}<div id="user_id" style="display:none;">{{ app.user.id }}</div>{%  endif %}      
     <h1>{{ entity.petitionTitle }}</h1>
     <small class="block styleCoor fsize13">
-        <a href="blog.html" class="label label-default light"><i class="fa fa-dot-circle-o"></i> Politics</a> 
-        <span class="label label-default light"> {{ entity.score }} Голосів</span>
+        {# <a href="" class="label label-default light"><i class="fa fa-dot-circle-o"></i>Політика</a> 
+        <span class="label label-default light"> {{ entity.score }} Голосів</span> #}
         <span class="label label-default light">{{ entity.dateAdded|date('Y-m-d H:i:s') }}</span> 
     </small>
-
+<h2>Набрано: {{ entity.score }} голосів</h2>
 </header>
 <hr class="half-margins">
 <article>
@@ -209,7 +209,7 @@
                 <fieldset>
                     <legend>Перший раз? Заповніть форму і натисніть "Підписати"</legend>
                     <div class="form-group">
-        {{ form_label(form.email, 'E-mail:*', {'label': 'E-mail', 'label_attr': {'class': 'col-lg-2 control-label required'}}) }}
+        {{ form_label(form.email, 'Email:*', {'label': 'Email', 'label_attr': {'class': 'col-lg-2 control-label required'}}) }}
         {{ form_widget(form.email) }}
                     </div>
                     <div class="form-group">
@@ -243,22 +243,12 @@
 <p id="signed-button" class="btn btn-default" style="display:none;">Ви уже підписали</p>                    
 <!-- modal content -->
 
-<div id="Xshare">
-    <a href="javascript:void(0)" class="twitter" data-social="{'type':'twitter', 'url':'http://code-tricks.com/51-best-jquery-plugins/', 'text': '51 Best jQuery Plugins'}" title="code-tricks">Share on Twitter</a>
-    <br>
-    <a href="javascript:void(0)" class="facebook" data-social="{'type':'facebook', 'url':'http://code-tricks.com/51-best-jquery-plugins/', 'text': '51 Best jQuery Plugins'}" title="code-tricks">Share on facebook</a>
-    <br>
-    <a href="javascript:void(0)" class="plusone" data-social="{'type':'plusone', 'url':'http://code-tricks.com/51-best-jquery-plugins/', 'text': '51 Best jQuery Plugins'}" title="code-tricks">Share on Google Plus</a>
-    <br>
-    <a href="javascript:void(0)" class="pinterest" data-social="{'type':'pinterest', 'url':'http://code-tricks.com/51-best-jquery-plugins/', 'text': '51 Best jQuery Plugins', 'image': 'http://code-tricks.com/wp-content/uploads/2013/05/Simple-Multi-Item-Slider-with-CSS-Animations-and-jQuery-code-tricks.jpg'}" title="code-tricks">Pin it</a>
-    
-  </div>
 <div id="basic-modal-content">
     <!-- <h3>Поширити петицію.</h3> -->
-<div id="share">
-    <a href="javascript:void(0)" class="facebook" data-social='{"type":"facebook", "url":"http://code-tricks.com/51-best-jquery-plugins/", "text": "51 Best jQuery Plugins"}' title="code-tricks"><img src="{{ asset('img/basic/facebook_1.png') }}"></a> 
-    <a href="javascript:void(0)" class="twitter" data-social='{"type":"twitter", "url":"http://code-tricks.com/51-best-jquery-plugins/", "text": "51 Best jQuery Plugins"}' title="code-tricks"><img src="{{ asset('img/basic/twitter_1.jpg') }}"></a>
-    <a href="javascript:void(0)" class="plusone" data-social='{"type":"plusone", "url":"http://code-tricks.com/51-best-jquery-plugins/", "text": "51 Best jQuery Plugins"}' title="code-tricks"><img src="{{ asset('img/basic/gplus_1.jpg') }}"></a>
+  <div id="share">
+    <a href="javascript:void(0)" class="facebook" data-social='{"type":"facebook", "url":"{{ path('petition_show', {'url': entity.petitionUrl}) }}", "text": "{{ entity.petitionTitle }}"}' title="Поширте у Facebook"><img src="{{ asset('img/basic/facebook_1.png') }}"></a> 
+    <a href="javascript:void(0)" class="twitter" data-social='{"type":"twitter", "url":"{{ path('petition_show', {'url': entity.petitionUrl}) }}", "text": "{{ entity.petitionTitle }}"}' title="Поширте у Twitter"><img src="{{ asset('img/basic/twitter_1.jpg') }}"></a>
+    <a href="javascript:void(0)" class="plusone" data-social='{"type":"plusone", "url":"{{ path('petition_show', {'url': entity.petitionUrl}) }}", "text": "{{ entity.petitionTitle }}"}' title="Поширте у Google Plus"><img src="{{ asset('img/basic/gplus_1.jpg') }}"></a>
   </div>
 </div>
 

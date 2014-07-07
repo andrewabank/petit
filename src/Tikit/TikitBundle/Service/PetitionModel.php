@@ -257,12 +257,33 @@ class PetitionModel
         $tikits = $query->getResult();
         return $tikits;
     }
+ 
+    public function getPetitionsByCategory($count_per_page,$offset)
+    {
+        $query = $this->em->createQuery('SELECT t, u.username, s.vote FROM \Tikit\TikitBundle\Entity\Petition t
+                                    JOIN \Tikit\TikitBundle\Entity\Category c WITH t.category = c.id
+                                    LEFT JOIN \Tikit\TikitBundle\Entity\FosUser u WITH u.id = t.user
+                                    LEFT JOIN \Tikit\TikitBundle\Entity\PetitionScore s
+                                    WITH s.user = t.user AND s.petition = t.id
+                                    AND t.status = 1 AND t.category = 1 ORDER BY t.score DESC')
+                    ->setMaxResults($count_per_page)
+                    ->setFirstResult($offset);
+        $tikits = $query->getResult();
+        return $tikits;
+    }
     
     public function getTotalPetitions()
+    {
+        $count = $this->em->createQuery('SELECT COUNT(p.id) FROM Tikit\TikitBundle\Entity\Petition p
+                JOIN \Tikit\TikitBundle\Entity\Category c WITH p.category = c.id WHERE p.status = 1 AND c.id = 1')
+                    ->getSingleScalarResult();
+        return $count;
+    }
+    public function getTotalPetitionsByCategory($categoryId)
     {
         $count = $this->em->createQuery('SELECT COUNT(p.id) FROM Tikit\TikitBundle\Entity\Petition p WHERE p.status = 1')
                     ->getSingleScalarResult();
         return $count;
     }
-    
+
 }

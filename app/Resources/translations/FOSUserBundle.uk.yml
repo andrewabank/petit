@@ -1,4 +1,4 @@
 security:
     login:
-        username: "E-mail:*"
+        username: "Email:*"
         password: "Пароль:*"

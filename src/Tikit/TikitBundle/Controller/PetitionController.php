@@ -326,7 +326,8 @@ class PetitionController extends Controller
     public function petitionsAction($page)
     {
         $request = $this->get('request');
-        $pageN = $request->get('page');
+        //$pageN = $request->get('page');
+        $pageN = $page;
         $total_count = $this->get('petition_model')->getTotalPetitions();
         //http://dev.dbl-a.com/symfony-2-0/symfony2-and-twig-pagination/
         $quantity = 2;
@@ -341,6 +342,31 @@ class PetitionController extends Controller
             'showing_from' => $page['showing_from'],
             'showing_to' => $page['showing_to'],
             'total_number' => $total_count
+        ));
+    }
+
+    /**
+     * @Route("/category/{category}", name="bycategory")
+     * @Template()
+     */
+    public function bycategoryAction($category)
+    {
+        $request = $this->get('request');
+        //$pageN = $request->get('page');
+        /*$pageN = $request->get('page');
+        $total_count = $this->get('petition_model')->getTotalPetitions();
+        $quantity = 2;*/
+        //$page = $this->get('util_model')->getPageData($total_count,$pageN,$quantity);
+        $petitions = $this->get('petition_model')->getPetitionsByCategory(50,0);
+        return $this->render('TikitTikitBundle:Petition:petitions.html.twig', array(
+            'page_title'  => 'Петиції',
+            'current_page'  => 1,
+            'total_pages' => 1,
+            'totalmostpop' => 0,
+            'petitions' => $petitions,
+            'showing_from' => 1,
+            'showing_to' => 50,
+            'total_number' => 1
         ));
     }
     
