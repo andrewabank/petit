@@ -335,6 +335,7 @@ class PetitionController extends Controller
         $petitions = $this->get('petition_model')->getPetitions($page['count_per_page'],$page['offset']);
         return $this->render('TikitTikitBundle:Petition:petitions.html.twig', array(
             'page_title'  => 'Петиції',
+            'pathController' => 'petition_petitions',
             'current_page'  => $page['page'],
             'total_pages' => $page['total_pages'],
             'totalmostpop' => 0,
@@ -346,28 +347,37 @@ class PetitionController extends Controller
     }
 
     /**
-     * @Route("/category/{category}", name="bycategory")
+     * @Route("/category/{category}/{page}", name="bycategory")
      * @Template()
      */
-    public function bycategoryAction($category)
+    public function bycategoryAction($category, $page)
     {
         $request = $this->get('request');
-        //$pageN = $request->get('page');
-        /*$pageN = $request->get('page');
-        $total_count = $this->get('petition_model')->getTotalPetitions();
-        $quantity = 2;*/
-        //$page = $this->get('util_model')->getPageData($total_count,$pageN,$quantity);
-        $petitions = $this->get('petition_model')->getPetitionsByCategory(50,0);
-        return $this->render('TikitTikitBundle:Petition:petitions.html.twig', array(
+        $total_count = $this->get('petition_model')->getTotalPetitionsByCategory($category);
+        $quantity = 10;
+        $page = $this->get('util_model')->getPageData($total_count,$page,$quantity);
+        $petitions = $this->get('petition_model')->getPetitionsByCategory($page['count_per_page'],$page['offset'],$category);
+        return $this->render('TikitTikitBundle:Petition:petitionscategory.html.twig', array(
             'page_title'  => 'Петиції',
-            'current_page'  => 1,
-            'total_pages' => 1,
+            'pathController' => 'bycategory',
+            'current_page'  => $page['page'],
+            'total_pages' => $page['total_pages'],
             'totalmostpop' => 0,
+            'category' => $category,
             'petitions' => $petitions,
-            'showing_from' => 1,
-            'showing_to' => 50,
-            'total_number' => 1
+            'showing_from' => $page['showing_from'],
+            'showing_to' => $page['showing_to'],
+            'total_number' => $total_count
         ));
+    }
+    
+    public function categoryMenuAction()
+    {
+        $categories = $this->get('petition_model')->getCategories();
+        return $this->render(
+            'TikitTikitBundle:Petition:categoryMenu.html.twig',
+            array('categories' => $categories)
+        );
     }
     
     /**

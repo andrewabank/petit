@@ -1,0 +1,4 @@
+{% for category in categories %}
+<li><a href="{{ path('bycategory', {'category': category.id}) }}">
+        <i class="fa fa-star-o"></i>{{ category.categoryName }}</a></li>
+{% endfor %}

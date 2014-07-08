@@ -258,14 +258,15 @@ class PetitionModel
         return $tikits;
     }
  
-    public function getPetitionsByCategory($count_per_page,$offset)
+    public function getPetitionsByCategory($count_per_page, $offset, $category)
     {
         $query = $this->em->createQuery('SELECT t, u.username, s.vote FROM \Tikit\TikitBundle\Entity\Petition t
                                     JOIN \Tikit\TikitBundle\Entity\Category c WITH t.category = c.id
                                     LEFT JOIN \Tikit\TikitBundle\Entity\FosUser u WITH u.id = t.user
                                     LEFT JOIN \Tikit\TikitBundle\Entity\PetitionScore s
                                     WITH s.user = t.user AND s.petition = t.id
-                                    AND t.status = 1 AND t.category = 1 ORDER BY t.score DESC')
+                                    AND t.status = 1 AND t.category = :category ORDER BY t.score DESC')
+                    ->setParameter('category', $category)
                     ->setMaxResults($count_per_page)
                     ->setFirstResult($offset);
         $tikits = $query->getResult();
@@ -279,11 +280,22 @@ class PetitionModel
                     ->getSingleScalarResult();
         return $count;
     }
-    public function getTotalPetitionsByCategory($categoryId)
+
+    public function getTotalPetitionsByCategory($category)
     {
-        $count = $this->em->createQuery('SELECT COUNT(p.id) FROM Tikit\TikitBundle\Entity\Petition p WHERE p.status = 1')
+        $count = $this->em->createQuery('SELECT COUNT(p.id) FROM Tikit\TikitBundle\Entity\Petition p WHERE p.status = 1
+                AND p.category = :category ')
+                    ->setParameter('category', $category)
                     ->getSingleScalarResult();
         return $count;
+    }
+
+    public function getCategories()
+    {
+        $query = $this->em->createQuery('SELECT c.id, c.categoryName FROM \Tikit\TikitBundle\Entity\Category c
+               ORDER BY c.id DESC');
+        $categories = $query->getResult();
+        return $categories;
     }
 
 }
