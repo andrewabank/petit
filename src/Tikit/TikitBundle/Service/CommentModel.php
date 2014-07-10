@@ -22,9 +22,9 @@ class CommentModel
     public function addComment($tikit_id, $commentBody, $user_id, $parent_id = 0)
     {
         $comment = new Comment();
-        $tikit = $this->em->find('\Tikit\TikitBundle\Entity\Tikit', $tikit_id);
+        $tikit = $this->em->find('\Acme\UserBundle\Entity\User', $tikit_id);
         $comment->setTikit($tikit);
-        $user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', $user_id);
+        $user = $this->em->find('\Acme\UserBundle\Entity\User', $user_id);
         $comment->setUser($user);
         $comment->setParentId($parent_id);
         $comment->setCommentBody($commentBody);
@@ -51,7 +51,7 @@ class CommentModel
         $sitespam = new SiteSpam();
         $comment = $this->em->find('\Tikit\TikitBundle\Entity\Comment', $comment_id);
         $sitespam->setCommentId($comment->getId());
-        $user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', $user_id);
+        $user = $this->em->find('\Acme\UserBundle\Entity\User', $user_id);
         $sitespam->setUser($user);
         $this->em->persist($sitespam);
         $this->em->flush();
@@ -98,7 +98,7 @@ class CommentModel
     public function getTikitComments($tikit_id)
     {
         $query = $this->em->createQuery('SELECT c, u.id, u.username FROM \Tikit\TikitBundle\Entity\Comment c
-                                    JOIN \Tikit\TikitBundle\Entity\FosUser u WITH u.id = c.user AND c.status = :status
+                                    JOIN \Acme\UserBundle\Entity\User u WITH u.id = c.user AND c.status = :status
                                     AND c.tikit = :tikit_id');
         $query->setParameters(array(
             'status' => Comment::STATUS_PUBLISHED,

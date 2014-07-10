@@ -3,8 +3,8 @@
 <div class="navbar-collapse nav-main-collapse collapse pull-right">
     <nav class="nav-main mega-menu">
         <ul class="nav nav-pills nav-main scroll-menu" id="topMain">
-            <li class="dropdown">
-                <a class="dropdown-toggle" href="{{ path('mostpopular') }}">
+            <li >
+                <a href="{{ path('mostpopular') }}">
                     Головна <i class="fa fa-angle-down"></i>
                 </a>
             </li>
@@ -32,8 +32,8 @@
                     </li>
                 </ul>
             </li>
-            <li class="dropdown">
-                <a class="dropdown-toggle" href="{% if app.user %} {{ path('petition_create') }} {% endif %}">
+            <li {% if app.user == false %}class="dropdown"{% endif %}>
+                <a {% if app.user == false %}class="dropdown-toggle"{% endif %} href="{% if app.user %}{{ path('petition_create') }} {% endif %}">
                     <b>Додати петицію</b> <i class="fa fa-angle-down"></i>
                 </a>
                                 {% if app.user == false %}
@@ -44,8 +44,8 @@
                                 {% endif %}
             </li>
                             {% if app.user %}
-            <li class="dropdown">
-                <a class="dropdown-toggle" href="{{ path('fos_user_security_logout') }}">
+            <li>
+                <a href="{{ path('fos_user_security_logout') }}">
                     Вийти <i class="fa fa-angle-down"></i>
                 </a>
             </li>

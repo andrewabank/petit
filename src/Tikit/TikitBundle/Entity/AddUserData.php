@@ -27,7 +27,7 @@ class AddUserData
     private $id;
 
     /**
-     * @var \Tikit\TikitBundle\Entity\FosUser
+     * @var \Acme\UserBundle\Entity\User
      */
     private $user;
 
@@ -94,10 +94,10 @@ class AddUserData
     /**
      * Set user
      *
-     * @param \Tikit\TikitBundle\Entity\FosUser $user
+     * @param \Acme\UserBundle\Entity\User $user
      * @return AddUserData
      */
-    public function setUser(\Tikit\TikitBundle\Entity\FosUser $user = null)
+    public function setUser(\Acme\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
     
@@ -107,7 +107,7 @@ class AddUserData
     /**
      * Get user
      *
-     * @return \Tikit\TikitBundle\Entity\FosUser 
+     * @return \Acme\UserBundle\Entity\User 
      */
     public function getUser()
     {

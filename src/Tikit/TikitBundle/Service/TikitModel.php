@@ -45,7 +45,7 @@ class TikitModel
         $tikit->setTikitUrl($form_data['tikit_url']);
         $category = $this->em->find('\Tikit\TikitBundle\Entity\Category', 1);
         $tikit->setCategory($category);
-        $user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', 1);
+        $user = $this->em->find('\Acme\UserBundle\Entity\User', 1);
         $tikit->setUser($user);
         $this->em->persist($tikit);
         $tikit_score = new TikitScore($tikit,$user,1);
@@ -65,7 +65,7 @@ class TikitModel
         $query->setParameter(1, $id);
         $tikit = $query->getResult();*/
         $query = $this->em->createQuery('SELECT t, u.id, u.username FROM \Tikit\TikitBundle\Entity\Tikit t
-                                    JOIN \Tikit\TikitBundle\Entity\FosUser u WITH u.id = t.user
+                                    JOIN \Acme\UserBundle\Entity\User u WITH u.id = t.user
                                     AND t.id = :id')
                                     ->setMaxResults(1);
         $query->setParameters(array(
@@ -86,7 +86,7 @@ class TikitModel
     public function getAllTikits($count_per_page,$offset)
     {
         $query = $this->em->createQuery('SELECT t, u.username FROM \Tikit\TikitBundle\Entity\Tikit t
-                                    LEFT JOIN \Tikit\TikitBundle\Entity\FosUser u WITH u.id = t.user
+                                    LEFT JOIN \Acme\UserBundle\Entity\User u WITH u.id = t.user
                                     AND t.status = 1 ORDER BY t.score DESC')
                     ->setMaxResults($count_per_page)
                     ->setFirstResult($offset);
@@ -108,7 +108,7 @@ class TikitModel
     public function getTikitsByCategory($count_per_page,$offset,$category)
     {
         $query = $this->em->createQuery('SELECT t, u.username, s.vote FROM \Tikit\TikitBundle\Entity\Tikit t
-                                    LEFT JOIN \Tikit\TikitBundle\Entity\FosUser u WITH u.id = t.user
+                                    LEFT JOIN \Acme\UserBundle\Entity\User u WITH u.id = t.user
                                     LEFT JOIN \Tikit\TikitBundle\Entity\TikitScore s
                                     WITH s.user = t.user AND s.tikit = t.id
                                     AND t.status = 1 AND t.category = :category ORDER BY t.score DESC')
@@ -124,7 +124,7 @@ class TikitModel
      public function getTikitsByUser($count_per_page,$offset,$user_id)
     {
         $query = $this->em->createQuery('SELECT t, u.username FROM \Tikit\TikitBundle\Entity\Tikit t
-                                    LEFT JOIN \Tikit\TikitBundle\Entity\FosUser u WITH u.id = t.user
+                                    LEFT JOIN \Acme\UserBundle\Entity\User u WITH u.id = t.user
                                     AND t.status = 1 AND t.user = :user_id ORDER BY t.score DESC')
                     ->setMaxResults($count_per_page)
                     ->setFirstResult($offset);
@@ -140,7 +140,7 @@ class TikitModel
         $sitespam = new SiteSpam();
         $tikit = $this->em->find('\Tikit\TikitBundle\Entity\Tikit', $tikit_id);
         $sitespam->setTikitId($tikit->getId());
-        $user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', $user_id);
+        $user = $this->em->find('\Acme\UserBundle\Entity\User', $user_id);
         $sitespam->setUser($user);
         $this->em->persist($sitespam);
         $this->em->flush();
@@ -203,7 +203,7 @@ class TikitModel
         $tikit = $this->em->find('\Tikit\TikitBundle\Entity\Tikit', $tikit_id);
         $tikit->setScore($tikit->getScore() + $vote);
         $tikitscore->setTikit($tikit);
-        $user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', $user_id);
+        $user = $this->em->find('\Acme\UserBundle\Entity\User', $user_id);
         $tikitscore->setUser($user);
         $this->em->persist($tikitscore);
         $this->em->persist($tikit);

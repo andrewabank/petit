@@ -28,7 +28,7 @@ class PetitionModel
     {       
         //$em = $this->getDoctrine()->getManager();
         $this->setPetitionUrlModel($entity);
-        $user = $this->em->getRepository('\Tikit\TikitBundle\Entity\FosUser')->findOneBy(array('id' => $user_id));
+        $user = $this->em->getRepository('\Acme\UserBundle\Entity\User')->findOneBy(array('id' => $user_id));
         $entity->setUser($user);
         $this->em->persist($entity);
         $petition_score = new PetitionScore($entity,$user,1);
@@ -175,7 +175,7 @@ class PetitionModel
             $petition->setScore($petition->getScore() + $vote);
             $petitionscore = new PetitionScore($petition_id,$user_id,$vote);
             $petitionscore->setPetition($petition);
-            $user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', $user_id);
+            $user = $this->em->find('\Acme\UserBundle\Entity\User', $user_id);
             $petitionscore->setUser($user);
             $this->em->persist($petitionscore);
             $this->em->persist($petition);
@@ -196,7 +196,7 @@ class PetitionModel
             
             $petition = $this->em->find('\Tikit\TikitBundle\Entity\Petition', $petitionId);
             $petitionscore->setPetition($petition);
-            $user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', $user_id);
+            $user = $this->em->find('\Acme\UserBundle\Entity\User', $user_id);
             $petitionscore->setUser($user);
             //$petitionscore->setPetition($petition);
             //$petitionscore->setUser($user);
@@ -235,7 +235,7 @@ class PetitionModel
     public function getPetitions($count_per_page,$offset)
     {
         $query = $this->em->createQuery('SELECT t, u.username, s.vote FROM \Tikit\TikitBundle\Entity\Petition t
-                                    LEFT JOIN \Tikit\TikitBundle\Entity\FosUser u WITH u.id = t.user
+                                    LEFT JOIN \Acme\UserBundle\Entity\User u WITH u.id = t.user
                                     LEFT JOIN \Tikit\TikitBundle\Entity\PetitionScore s
                                     WITH s.user = t.user AND s.petition = t.id
                                     AND t.status = 1 ORDER BY t.dateAdded DESC')
@@ -248,7 +248,7 @@ class PetitionModel
     public function getMostPopularPetitions($count_per_page,$offset)
     {
         $query = $this->em->createQuery('SELECT t, u.username, s.vote FROM \Tikit\TikitBundle\Entity\Petition t
-                                    LEFT JOIN \Tikit\TikitBundle\Entity\FosUser u WITH u.id = t.user
+                                    LEFT JOIN \Acme\UserBundle\Entity\User u WITH u.id = t.user
                                     LEFT JOIN \Tikit\TikitBundle\Entity\PetitionScore s
                                     WITH s.user = t.user AND s.petition = t.id
                                     AND t.status = 1 ORDER BY t.score DESC')
@@ -262,7 +262,7 @@ class PetitionModel
     {
         $query = $this->em->createQuery('SELECT t, u.username, s.vote FROM \Tikit\TikitBundle\Entity\Petition t
                                     JOIN \Tikit\TikitBundle\Entity\Category c WITH t.category = c.id
-                                    LEFT JOIN \Tikit\TikitBundle\Entity\FosUser u WITH u.id = t.user
+                                    LEFT JOIN \Acme\UserBundle\Entity\User u WITH u.id = t.user
                                     LEFT JOIN \Tikit\TikitBundle\Entity\PetitionScore s
                                     WITH s.user = t.user AND s.petition = t.id
                                     AND t.status = 1 AND t.category = :category ORDER BY t.score DESC')

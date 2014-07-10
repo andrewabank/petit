@@ -22,6 +22,14 @@ class User extends BaseUser
      */
     protected $id;
 
+    const SCORE = 1;    
+    /**
+     * 
+     * @ORM\Column(type="integer", length=11)
+     *
+     */
+    protected $petition  = self::SCORE;
+
     public function __construct()
     {
         parent::__construct();
@@ -29,7 +37,6 @@ class User extends BaseUser
         $this->roles = array('ROLE_USER');
         $this->petition = 0;
     }
-    // override methods for username and tie them with email field
 
     /**
      * Sets the email.
@@ -76,13 +83,6 @@ class User extends BaseUser
 
         return $this;
     }
-    
-    /**
-     * 
-     * @ORM\Column(type="integer", length=11)
-     *
-     */
-    protected $petition;
 
     
     public function getPetition()
@@ -96,5 +96,11 @@ class User extends BaseUser
 
         return $this;
     }
+    
+    //represent object as string
+    public function __toString()
+    {
+        return $this->username;
+    }   
 }
 

@@ -6,7 +6,7 @@
     </id>
     <field name="score" type="integer" column="score" nullable="false"/>
     <field name="dateSatusUpdated" type="datetime" column="date_satus_updated" nullable="false"/>
-    <many-to-one field="user" target-entity="FosUser">
+    <many-to-one field="user" target-entity="Acme\UserBundle\Entity\User">
       <join-columns>
         <join-column name="user_id" referenced-column-name="id"/>
       </join-columns>

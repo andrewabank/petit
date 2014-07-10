@@ -25,7 +25,7 @@ class PetitionScore
     private $petition;
 
     /**
-     * @var \Tikit\TikitBundle\Entity\FosUser
+     * @var \Acme\UserBundle\Entity\User
      */
     private $user;
 
@@ -105,10 +105,10 @@ class PetitionScore
     /**
      * Set user
      *
-     * @param \Tikit\TikitBundle\Entity\FosUser $user
+     * @param \Acme\UserBundle\Entity\User $user
      * @return PetitionScore
      */
-    public function setUser(\Tikit\TikitBundle\Entity\FosUser $user = null)
+    public function setUser(\Acme\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
@@ -118,7 +118,7 @@ class PetitionScore
     /**
      * Get user
      *
-     * @return \Tikit\TikitBundle\Entity\FosUser
+     * @return \Acme\UserBundle\Entity\User
      */
     public function getUser()
     {

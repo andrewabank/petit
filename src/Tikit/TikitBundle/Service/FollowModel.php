@@ -21,9 +21,9 @@ class FollowModel
     public function addFollowing($user_id, $follower_id)
     {
         $following = new Following;
-        $user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', $user_id);
+        $user = $this->em->find('\Acme\UserBundle\Entity\User', $user_id);
         $following->setUser($user);
-        $user = $this->em->find('\Tikit\TikitBundle\Entity\FosUser', $follower_id);
+        $user = $this->em->find('\Acme\UserBundle\Entity\User', $follower_id);
         $following->setFollower($user);
         $this->em->persist($following);
         $this->em->flush();

@@ -15,12 +15,12 @@ class Following
     private $id;
 
     /**
-     * @var \Tikit\TikitBundle\Entity\FosUser
+     * @var \Acme\UserBundle\Entity\User
      */
     private $user;
 
     /**
-     * @var \Tikit\TikitBundle\Entity\FosUser
+     * @var \Acme\UserBundle\Entity\User
      */
     private $follower;
 
@@ -38,10 +38,10 @@ class Following
     /**
      * Set user
      *
-     * @param \Tikit\TikitBundle\Entity\FosUser $user
+     * @param \Acme\UserBundle\Entity\User $user
      * @return Following
      */
-    public function setUser(\Tikit\TikitBundle\Entity\FosUser $user = null)
+    public function setUser(\Acme\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
     
@@ -51,7 +51,7 @@ class Following
     /**
      * Get user
      *
-     * @return \Tikit\TikitBundle\Entity\FosUser 
+     * @return \Acme\UserBundle\Entity\User 
      */
     public function getUser()
     {
@@ -61,10 +61,10 @@ class Following
     /**
      * Set follower
      *
-     * @param \Tikit\TikitBundle\Entity\FosUser $follower
+     * @param \Acme\UserBundle\Entity\User $follower
      * @return Following
      */
-    public function setFollower(\Tikit\TikitBundle\Entity\FosUser $follower = null)
+    public function setFollower(\Acme\UserBundle\Entity\User $follower = null)
     {
         $this->follower = $follower;
     
@@ -74,7 +74,7 @@ class Following
     /**
      * Get follower
      *
-     * @return \Tikit\TikitBundle\Entity\FosUser 
+     * @return \Acme\UserBundle\Entity\User 
      */
     public function getFollower()
     {

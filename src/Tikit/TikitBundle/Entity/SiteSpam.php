@@ -44,7 +44,7 @@ class SiteSpam
     private $id;
 
     /**
-     * @var \Tikit\TikitBundle\Entity\FosUser
+     * @var \Acme\UserBundle\Entity\User
      */
     private $user;
 
@@ -182,10 +182,10 @@ class SiteSpam
     /**
      * Set user
      *
-     * @param \Tikit\TikitBundle\Entity\FosUser $user
+     * @param \Acme\UserBundle\Entity\User $user
      * @return SiteSpam
      */
-    public function setUser(\Tikit\TikitBundle\Entity\FosUser $user = null)
+    public function setUser(\Acme\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
     
@@ -195,7 +195,7 @@ class SiteSpam
     /**
      * Get user
      *
-     * @return \Tikit\TikitBundle\Entity\FosUser 
+     * @return \Acme\UserBundle\Entity\User 
      */
     public function getUser()
     {
