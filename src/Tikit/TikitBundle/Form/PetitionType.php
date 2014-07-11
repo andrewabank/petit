@@ -29,7 +29,7 @@ class PetitionType extends AbstractType
                 'property'=>'categoryName',
                 'label' => 'Адресат*: ',
                 'attr'=>array('style'=>'width:300px'),
-                'required' => false,
+                'required' => true,
                 'data'=>$this->em->getReference("TikitTikitBundle:Category",1) ))
             ->add('captcha', 'captcha', array(
                 'label' => 'Капча*: ',

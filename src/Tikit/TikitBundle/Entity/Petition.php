@@ -237,7 +237,7 @@ class Petition
      * @param \Tikit\TikitBundle\Entity\Category $category
      * @return Petition
      */
-    public function setCategory(\Tikit\TikitBundle\Entity\Category $category = null)
+    public function setCategory(\Tikit\TikitBundle\Entity\Category $category)
     {
         $this->category = $category;
     
