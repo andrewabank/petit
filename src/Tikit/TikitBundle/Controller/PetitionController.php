@@ -71,10 +71,10 @@ class PetitionController extends Controller
             return $this->redirect($this->generateUrl('petition_show', array('url' => $entity->getPetitionUrl())));
         }
 
-        return array(
+        return $this->render('TikitTikitBundle:Petition:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
-        );
+        ));
     }
 
     /**
@@ -164,14 +164,14 @@ class PetitionController extends Controller
         } else {
             $admin = true;
         }
-        return array(
+        return $this->render('TikitTikitBundle:Petition:show.html.twig', array(
             'admin' => $admin,
             'entity'      => $entity,
             'csrf_token' => $csrfToken,
             'delete_form' => $deleteForm->createView(),
             'scored' => $scored,
             'form' => $form->createView()
-        );
+        ));
     }
 
     /**
@@ -357,7 +357,7 @@ class PetitionController extends Controller
         $quantity = 10;
         $page = $this->get('util_model')->getPageData($total_count,$page,$quantity);
         $petitions = $this->get('petition_model')->getPetitionsByCategory($page['count_per_page'],$page['offset'],$category);
-        return $this->render('TikitTikitBundle:Petition:petitionscategory.html.twig', array(
+        return $this->render('TikitTikitBundle:Petition:petitionsCategory.html.twig', array(
             'page_title'  => 'Петиції',
             'pathController' => 'bycategory',
             'current_page'  => $page['page'],
