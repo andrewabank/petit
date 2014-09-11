@@ -18,15 +18,19 @@
 {% endfor %}
 
 {%for petition in petitions%}
+{% set foo %}{{ path('petition_show', {'url': petition.0.petitionUrl}) }}{% endset %}
 <div class="row">
     <div class="col-md-12">
-    <h4>
+    <h3>
         <a class="styleColor" href="{{ path('petition_show', {'url': petition.0.petitionUrl}) }}">{{petition.0.petitionTitle}}</a>
-    </h4>
-    <p>{{ petition.0.petitionDescription|length > 500 ? petition.0.petitionDescription|slice(0, 300) ~ ' ..... ' : petition.0.petitionDescription  }}
+    </h3>
+    <p>{{ petition.0.petitionDescription|length > 500 ? petition.0.petitionDescription|slice(0, 300) ~ '' : petition.0.petitionDescription  }}
+    {% if petition.0.petitionDescription|length > 500 %}
+        <a class="styleColor" href="{{ foo }}"> ...... читати далі </a>
+    {% endif %}
     <small class="block styleSecondColor">{{petition.0.dateAdded|date('Y-m-d H:i:s')}}</small>
+    адресат: <a href="{{path('bycategory', {category: category, page: 1}) }}">{{ petition.categoryName }}</a>
     </p>
-    <p>адресат: <a href="http://ru.reddit.com/r/pics/" class="subreddit hover">pics</a></p>
     <small class="block styleCoor fsize13">
         <span class="label label-default light"> {{petition.0.score }} Голосів</span>
     </small>

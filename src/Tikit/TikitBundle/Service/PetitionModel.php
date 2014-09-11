@@ -234,7 +234,9 @@ class PetitionModel
 
     public function getPetitions($count_per_page,$offset)
     {
-        $query = $this->em->createQuery('SELECT t, u.username, s.vote FROM \Tikit\TikitBundle\Entity\Petition t
+        $query = $this->em->createQuery('SELECT t, u.username, s.vote, c.categoryName, c.id as cid 
+                                    FROM \Tikit\TikitBundle\Entity\Petition t
+                                    JOIN \Tikit\TikitBundle\Entity\Category c WITH t.category = c.id
                                     LEFT JOIN \Acme\UserBundle\Entity\User u WITH u.id = t.user
                                     LEFT JOIN \Tikit\TikitBundle\Entity\PetitionScore s
                                     WITH s.user = t.user AND s.petition = t.id
@@ -247,7 +249,9 @@ class PetitionModel
  
     public function getMostPopularPetitions($count_per_page,$offset)
     {
-        $query = $this->em->createQuery('SELECT t, u.username, s.vote FROM \Tikit\TikitBundle\Entity\Petition t
+        $query = $this->em->createQuery('SELECT t, u.username, s.vote, c.categoryName, c.id as cid 
+                                    FROM \Tikit\TikitBundle\Entity\Petition t
+                                    JOIN \Tikit\TikitBundle\Entity\Category c WITH t.category = c.id
                                     LEFT JOIN \Acme\UserBundle\Entity\User u WITH u.id = t.user
                                     LEFT JOIN \Tikit\TikitBundle\Entity\PetitionScore s
                                     WITH s.user = t.user AND s.petition = t.id
@@ -260,7 +264,7 @@ class PetitionModel
  
     public function getPetitionsByCategory($count_per_page, $offset, $category)
     {
-        $query = $this->em->createQuery('SELECT t, u.username, s.vote FROM \Tikit\TikitBundle\Entity\Petition t
+        $query = $this->em->createQuery('SELECT t, u.username, s.vote, c.categoryName FROM \Tikit\TikitBundle\Entity\Petition t
                                     JOIN \Tikit\TikitBundle\Entity\Category c WITH t.category = c.id
                                     LEFT JOIN \Acme\UserBundle\Entity\User u WITH u.id = t.user
                                     LEFT JOIN \Tikit\TikitBundle\Entity\PetitionScore s
