@@ -269,7 +269,7 @@ class PetitionModel
                                     LEFT JOIN \Acme\UserBundle\Entity\User u WITH u.id = t.user
                                     LEFT JOIN \Tikit\TikitBundle\Entity\PetitionScore s
                                     WITH s.user = t.user AND s.petition = t.id
-                                    AND t.status = 1 AND t.category = :category ORDER BY t.score DESC')
+                                    AND t.status = 1 WHERE t.category = :category ORDER BY t.score DESC')
                     ->setParameter('category', $category)
                     ->setMaxResults($count_per_page)
                     ->setFirstResult($offset);

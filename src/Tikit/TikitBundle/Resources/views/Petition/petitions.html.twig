@@ -2,6 +2,11 @@
 
 {% block title %}{{ page_title }}{% endblock %}
 
+
+{% block stylesheets %}
+<link href="{{ asset('/css/font-awesome.css') }}" rel="stylesheet" type="text/css" />
+{% endblock%}
+
 {% block javascripts %}
     <script src="{{ asset('/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('/js/bootswatch.js') }}"></script>
@@ -23,7 +28,10 @@
     <h3>
         <a class="styleColor" href="{{ path('petition_show', {'url': petition.0.petitionUrl}) }}">{{petition.0.petitionTitle}}</a>
     </h3>
-    <p>{{ petition.0.petitionDescription|length > 500 ? petition.0.petitionDescription|slice(0, 300) ~ ' ..... ' : petition.0.petitionDescription  }}
+    <p>{{ petition.0.petitionDescription|length > 300 ? petition.0.petitionDescription|slice(0, 300) ~ '' : petition.0.petitionDescription  }}
+       {% if petition.0.petitionDescription|length > 300 %}
+            <a href="{{ path('petition_show', {'url': petition.0.petitionUrl}) }}"> ..... читати далі </a>
+        {% endif %} 
         <small class="block styleSecondColor">{{petition.0.dateAdded|date('Y-m-d H:i:s')}}</small>
         адресат: <a href="{{path('bycategory', {'category': petition.cid, 'page': 1}) }}">{{ petition.categoryName }}</a>
     </p>

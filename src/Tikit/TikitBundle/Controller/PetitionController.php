@@ -46,7 +46,6 @@ class PetitionController extends Controller
      */
     public function createAction(Request $request)
     {
-        
         $user = $this->container->get('security.context')->getToken()->getUser();
         if (!is_object($user)) {
 
@@ -286,7 +285,16 @@ class PetitionController extends Controller
     {
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
-
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        if (!is_object($user)|| !$this->container->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $session = $request->getSession();
+            // add flash messages
+            $session->getFlashBag()->add(
+                'warning',
+                'Please login to create petition'
+            );
+            return $this->redirect($this->generateUrl('mostpopular'));
+        }
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('TikitTikitBundle:Petition')->find($id);

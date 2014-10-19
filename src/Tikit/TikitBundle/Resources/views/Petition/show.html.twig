@@ -5,6 +5,7 @@
 {% endblock %}
     {% block stylesheets %}
 <link href="{{ asset('/css/tikit/style.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/font-awesome.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('/css/simplemodal/basic.css') }}" rel="stylesheet" type="text/css" />
 {# <link href="{{ asset('/css/simplemodal/basic_ie.css') }}" rel="stylesheet" type="text/css" /> #}
 {% endblock%}
@@ -25,7 +26,7 @@
 <script type="text/javascript">
     $(function()
     {
-        $("#share a").jqSocialSharer({
+        $(".share a").jqSocialSharer({
       "popUpWidth" : 600,               
       "popUpHeight": 500,               
       "popUpTop"   : 100,               
@@ -34,7 +35,7 @@
     $("#Xshare a").jqSocialSharer();
         //document.getElementById('password').setCustomValidity('Будь-ласка введіть пароль');
         //document.getElementById('username').setCustomValidity('Будь-ласка введіть email');
-        $( "#share a" ).click(function() {
+        $( ".share a" ).click(function() {
             $.modal.close();
         });
         $( "#Xshare a" ).click(function() {
@@ -237,15 +238,22 @@
    {% if scored == false %}
 <a href="javascript:void(0)" id="source-button" class="btn btn-default">Підписати петицію</a>
    {% else %}
-<p class="btn btn-default">Ви уже підписали</p> Дякуємо. Можете поширити!
+<p class="btn btn-default">Ви уже підписали. Дякуємо!</p>
    {% endif %}  
 {% endif %}
 <p id="signed-button" class="btn btn-default" style="display:none;">Ви уже підписали</p>                    
 <!-- modal content -->
 
+<div class="share">
+    <p class="socials">
+    <a href="javascript:void(0)" class="rounded-icon social fa fa-facebook facebook" data-social='{"type":"facebook", "url":"{{ path('petition_show', {'url': entity.petitionUrl}) }}", "text": "{{ entity.petitionTitle }}"}' title="Поширте у Facebook"><!-- facebook --></a>
+    <a href="javascript:void(0)" class="rounded-icon social fa fa-twitter twitter" data-social='{"type":"twitter", "url":"{{ path('petition_show', {'url': entity.petitionUrl}) }}", "text": "{{ entity.petitionTitle }}"}' title="Поширте у Twitter"><!-- twitter --></a>
+    <a href="javascript:void(0)" class="rounded-icon social fa fa-google-plus plusone" data-social='{"type":"plusone", "url":"{{ path('petition_show', {'url': entity.petitionUrl}) }}", "text": "{{ entity.petitionTitle }}"}' title="Поширте у Google Plus"><!-- google plus --></a>
+    </p>
+</div>
 <div id="basic-modal-content">
     <!-- <h3>Поширити петицію.</h3> -->
-  <div id="share">
+  <div class="share">
     <a href="javascript:void(0)" class="facebook" data-social='{"type":"facebook", "url":"{{ path('petition_show', {'url': entity.petitionUrl}) }}", "text": "{{ entity.petitionTitle }}"}' title="Поширте у Facebook"><img src="{{ asset('img/basic/facebook_1.png') }}"></a> 
     <a href="javascript:void(0)" class="twitter" data-social='{"type":"twitter", "url":"{{ path('petition_show', {'url': entity.petitionUrl}) }}", "text": "{{ entity.petitionTitle }}"}' title="Поширте у Twitter"><img src="{{ asset('img/basic/twitter_1.jpg') }}"></a>
     <a href="javascript:void(0)" class="plusone" data-social='{"type":"plusone", "url":"{{ path('petition_show', {'url': entity.petitionUrl}) }}", "text": "{{ entity.petitionTitle }}"}' title="Поширте у Google Plus"><img src="{{ asset('img/basic/gplus_1.jpg') }}"></a>

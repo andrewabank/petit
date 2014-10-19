@@ -26,10 +26,10 @@ class UtilModel {
             $offset = $count_per_page * ($page - 1);
         }
         if ($page == 1) {
-            $showingFrom = 1;
+            $showingFrom = $total_pages ? 1 : 0;
             $showingTo = $count_per_page;
         } else {
-            $showingFrom = ($page-1)*$count_per_page + 1;
+            $showingFrom = $total_pages ? (($page-1)*$count_per_page + 1) : 0;
             $showingTo = $page*$count_per_page;
         }
         if ($page == $total_pages) {
